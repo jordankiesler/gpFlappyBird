@@ -272,13 +272,16 @@ class Game:
 
             # TODO: Pew pew!
             if bird.score%50 == 0:
-                Bullet(self, self._bullet_image, bird.rect.x, bird.rect.y, bird.angle)
+                Bullet(self, self._bullet_image, bird.rect.x, bird.rect.y, bird.angle, bird)
 
-        for rock in self.rocks:
-            if pg.sprite.spritecollideany(rock, self.bullets):
-                rock.kill()
+        for bullet in self.bullets:
+            if pg.sprite.spritecollide(bullet, self.rocks, dokill=True):
+                bullet.bird.score += 50000
 
-        self._max_score += 1
+        best_bird = sorted(self.birds, key=lambda bird: bird.score)
+        self._max_score = best_bird[-1].score
+
+        # self._max_score += 1
         self._max_score_so_far = max(self._max_score_so_far, self._max_score)
 
         # spawn a new pipe if necessary

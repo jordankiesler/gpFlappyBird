@@ -119,7 +119,7 @@ class Rock(MovableSprite):
 # TODO: ANGLES!
 class Bullet(MovableSprite):
 
-    def __init__(self, game, image: pg.Surface, x, y, angle):
+    def __init__(self, game, image: pg.Surface, x, y, angle, bird):
         self._layer = 1
         super().__init__(game.all_sprites, game.bullets)
         self._game = game
@@ -127,6 +127,7 @@ class Bullet(MovableSprite):
         self.origin_image = self.image
         self.rect = self.image.get_rect(x=x, y=y)
         self.angle = angle
+        self.bird = bird
         # self.image = pg.transform.rotate(self.origin_image, self.angle)
 
     def moveby(self, dx=0, dy=0):
