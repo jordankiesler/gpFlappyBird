@@ -56,6 +56,12 @@ class Bird(MovableSprite):
     def flap(self):
         self._vel_y = JUMP_SPEED
 
+    def flapLeft(self):
+        self._vel_y = JUMP_SPEED
+
+    def flapRight(self):
+        self._vel_y = -JUMP_SPEED
+
     def shoot(self):
         Bullet(self._game, self._game._bullet_image, self.rect.x, self.rect.y, self.angle, self)
 
@@ -73,9 +79,9 @@ class AIBird(Bird):
         super().kill()
         self.brain.fitness = self.score
 
-    def eval(self, v, h, g):
+    def eval(self, v, h, g, vr, hr):
         # Now has two outputs
-        return self.brain.eval(v, h, g)
+        return self.brain.eval(v, h, g, vr, hr)
 
 
 class PipeType(enum.Enum):

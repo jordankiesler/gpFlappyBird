@@ -13,7 +13,7 @@ FONT_SIZE = 20
 WHITE = (255, 255, 255)
 
 JUMP_SPEED = -3.5     # once the bird flaps, its speed becomes this value
-GRAVITY_ACC = 0.35
+GRAVITY_ACC = 0 #0.35
 BIRD_X_SPEED = 3   # the const horizontal speed of the bird
 BIRD_MAX_Y_SPEED = 5    # the maximum downward speed
 
@@ -48,4 +48,4 @@ PP_FORMULA_SIMPLIFICATION = True
 PP_GRAPH_VISUALIZATION = False
 
 # for reproduction by setting an integer value; otherwise, set `None`
-RANDOM_SEED = 26  # 265  # 14256
+RANDOM_SEED = None  # 26  # 265  # 14256

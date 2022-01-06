@@ -45,7 +45,8 @@ class Game:
 
         self.running = True
         self.playing = False
-        self._front_pipe = None  # the pipe in the most front
+        self._front_pipe = None                     # the pipe in the most front
+        self._front_rock = None                     # the rock in the most front
         self._min_pipe_space = MIN_PIPE_SPACE
         self._min_pipe_gap = MIN_PIPE_GAP
 
@@ -78,7 +79,6 @@ class Game:
         self._spawn_pipe(80)  # the first pipe with x as the baseline
         while self._front_pipe.rect.x < SCREEN_WIDTH:
             self._spawn_pipe()
-            Rock(self, self._rock_image, random.randint(50, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
         # create the background
         Background(self, self._background_image)
 
@@ -89,7 +89,7 @@ class Game:
         def _load_one_image(file_name):
             return pg.image.load(os.path.join(IMG_DIR, file_name)).convert_alpha()
 
-        self._bird_image = _load_one_image('bird.png')
+        self._bird_image = _load_one_image('airplane.png')
         self._pipe_images = [_load_one_image(name) for name in ['pipetop.png', 'pipebottom.png']]
         self._background_image = _load_one_image('background.png')
         self._blue_bird_image = _load_one_image('bluebird.png')
@@ -123,6 +123,8 @@ class Game:
         top_pipe = Pipe(self, self._pipe_images[0], centerx, top_length, PipeType.TOP)
         bottom_pipe = Pipe(self, self._pipe_images[1], centerx, bottom_length, PipeType.BOTTOM)
         self._front_pipe = top_pipe
+        rock = Rock(self, self._rock_image, random.randint(50, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
+        self._front_rock = rock
         top_pipe.gap = gap
         bottom_pipe.gap = gap
 
@@ -202,7 +204,7 @@ class Game:
                     elif event.key == pg.K_2:
                         self._fps = 2 * FPS
                     elif event.key == pg.K_3:
-                        self._fps = 3 * FPS
+                        self._fps = 10 * FPS
                     elif event.key == pg.K_h:  # ctrl+h: create a human player
                         if not self._human_bird or not self._human_bird.alive():
                             self._create_human_player()
@@ -224,18 +226,38 @@ class Game:
                                 key=lambda p: p.rect.x)
         return front_bottom_pipe
 
+    def _get_front_rock(self, bird):
+        """
+        Get the most front rock before the bird
+        """
+        try:
+            front_rock = min((r for r in self.rocks if r.rect.right >= bird.rect.left), key=lambda r: r.rect.x)
+            return front_rock
+        except ValueError:
+            return Rock(self, self._rock_image, random.randint(SCREEN_WIDTH, SCREEN_WIDTH*1.2), random.randint(100, 400))
+
+
     def try_flap(self, bird):
         """
         Try to flap the bird if needed
         """
         # compute the tree inputs: v, h, g
         front_bottom_pipe = self._get_front_bottom_pipe(bird)
+        front_rock = self._get_front_rock(bird)
         h = front_bottom_pipe.rect.x - bird.rect.x
         v = front_bottom_pipe.rect.y - bird.rect.y
         g = front_bottom_pipe.gap
-        if bird.eval(v, h, g)[0] > 0:
-            bird.flap()
-        if bird.eval(v, h, g)[1] > 0:
+
+        hr = front_rock.rect.x - bird.rect.x
+        vr = front_rock.rect.y - bird.rect.y
+
+        if bird.eval(v, h, g, vr, hr)[0] > 0:
+            # bird.flap()
+            bird.flapLeft()
+        if bird.eval(v, h, g, vr, hr)[0] < 0:
+            # bird.flap()
+            bird.flapRight()
+        if bird.eval(v, h, g, vr, hr)[1] > 0:
             bird.shoot()
 
 
@@ -290,7 +312,7 @@ class Game:
         # spawn a new pipe if necessary
         while self._front_pipe.rect.x < SCREEN_WIDTH:
             self._spawn_pipe()
-            Rock(self, self._rock_image, random.randint(SCREEN_WIDTH, SCREEN_WIDTH*1.5), random.randint(100, 400))
+            Rock(self, self._rock_image, random.randint(SCREEN_WIDTH, SCREEN_WIDTH*1.2), random.randint(100, 400))
 
     def _draw(self):
         self.all_sprites.draw(self._screen)

@@ -48,7 +48,7 @@ class Individual:
         self.functionTable = functionTable  # Table of functions that can be set for each node
         self.weightMin = -1  # Min weight for each input
         self.weightMax = 1  # Max weight for each input
-        self.numInputs = 3  # Set the number of inputs - currently 3 - v, g, and h
+        self.numInputs = 5  # Set the number of inputs - currently 3 - v, g, and h (+2 for the rock)
         self.numOutputs = 2  # Set the number of outputs for the graph (currently 1 - flap or not)
         self.numNodes = 100  # Set the number of nodes for each genotype
         self.nodes = []  # Initialize empty list to hold all the node objects
@@ -130,11 +130,19 @@ class Individual:
                 node.functionIndex = random.randint(0, len(child.functionTable) - 1)
             # Iterate through every input to see if it will mutate
             oldInputIndices = node.inputIndices
+            oldWeightIndices = node.inputWeights
             node.inputIndices = []
+            node.inputWeights = []
             for inputIndex in reversed(range(child.functionTable[node.functionIndex].arity)):
                 # If randomly chosen to mutate, append the new index value
                 if random.random() < mutRate:
                     node.inputIndices.append(random.randint(0 - child.numInputs, child.nodes.index(node) - 1))
+                    # Try except used to keep the same weights if possible, or add a new one if the previous
+                    # arity was only one and a new function is chosen with an arity of two
+                    try:
+                        node.inputWeights.append(oldWeightIndices[inputIndex])
+                    except IndexError:
+                        node.inputWeights.append(random.uniform(self.weightMin, self.weightMax))
                 # If the new function takes more inputs than the old function
                 elif inputIndex > len(node.inputIndices):
                     node.inputIndices.append(random.randint(0 - child.numInputs, child.nodes.index(node) - 1))
@@ -142,6 +150,7 @@ class Individual:
                 # If the input index isn't mutated and an input already exists, put it back where it was
                 else:
                     node.inputIndices.append(oldInputIndices[inputIndex])
+                    node.inputWeights.append(oldWeightIndices[inputIndex])
             # Reset all the nodes back to inactive as a default
             node.active = False
 
