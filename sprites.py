@@ -56,8 +56,8 @@ class Bird(MovableSprite):
     def flap(self):
         self._vel_y = JUMP_SPEED
 
-    def shoot(self, bullet):
-        bullet.launch(self.angle)
+    def shoot(self):
+        Bullet(self._game, self._game._bullet_image, self.rect.x, self.rect.y, self.angle, self)
 
     @property
     def vel_y(self):
@@ -74,6 +74,7 @@ class AIBird(Bird):
         self.brain.fitness = self.score
 
     def eval(self, v, h, g):
+        # Now has two outputs
         return self.brain.eval(v, h, g)
 
 
@@ -151,9 +152,3 @@ class Background(pg.sprite.Sprite):
         else:
             self.image = image
         self.rect = self.image.get_rect()
-
-
-
-
-
-

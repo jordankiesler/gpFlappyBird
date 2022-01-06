@@ -49,7 +49,7 @@ class Individual:
         self.weightMin = -1  # Min weight for each input
         self.weightMax = 1  # Max weight for each input
         self.numInputs = 3  # Set the number of inputs - currently 3 - v, g, and h
-        self.numOutputs = 1  # Set the number of outputs for the graph (currently 1 - flap or not)
+        self.numOutputs = 2  # Set the number of outputs for the graph (currently 1 - flap or not)
         self.numNodes = 100  # Set the number of nodes for each genotype
         self.nodes = []  # Initialize empty list to hold all the node objects
         self.fitness = 0  # Initialize fitness value of the genotype to 0
@@ -118,7 +118,7 @@ class Individual:
 
         # Return the final output value
         # TODO: This will have to be updated if there are multiple output values
-        return self.nodes[-1].output
+        return self.nodes[-1].output, self.nodes[-2].output
 
     def mutate(self, mutRate):
         # Creates a child genotype to be mutated, leaving the parent genotype untouched

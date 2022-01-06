@@ -233,8 +233,11 @@ class Game:
         h = front_bottom_pipe.rect.x - bird.rect.x
         v = front_bottom_pipe.rect.y - bird.rect.y
         g = front_bottom_pipe.gap
-        if bird.eval(v, h, g) > 0:
+        if bird.eval(v, h, g)[0] > 0:
             bird.flap()
+        if bird.eval(v, h, g)[1] > 0:
+            bird.shoot()
+
 
     def _update(self):
         """
@@ -270,16 +273,16 @@ class Game:
         for bird in self.birds:
             bird.score += 1  # when a bird dies, its score will be set to the CGP individual's fitness automatically
 
-            # TODO: Pew pew!
-            if bird.score%50 == 0:
-                Bullet(self, self._bullet_image, bird.rect.x, bird.rect.y, bird.angle, bird)
+            # # TODO: Pew pew!
+            # if bird.score%50 == 0:
+            #     Bullet(self, self._bullet_image, bird.rect.x, bird.rect.y, bird.angle, bird)
 
         for bullet in self.bullets:
             if pg.sprite.spritecollide(bullet, self.rocks, dokill=True):
-                bullet.bird.score += 50000
+                bullet.bird.score += 1000
 
-        best_bird = sorted(self.birds, key=lambda bird: bird.score)
-        self._max_score = best_bird[-1].score
+        sortedBirds = sorted(self.birds, key=lambda bird: bird.score)
+        self._max_score = sortedBirds[-1].score
 
         # self._max_score += 1
         self._max_score_so_far = max(self._max_score_so_far, self._max_score)
