@@ -48,4 +48,4 @@ PP_FORMULA_SIMPLIFICATION = True
 PP_GRAPH_VISUALIZATION = False
 
 # for reproduction by setting an integer value; otherwise, set `None`
-RANDOM_SEED = None # 14256
+RANDOM_SEED = 26  # 265  # 14256

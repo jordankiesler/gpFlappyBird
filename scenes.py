@@ -29,7 +29,7 @@ class SceneManager:
             self.scene.draw()
             pg.display.update()
 
-    def swicth_to(self, scene):
+    def switch_to(self, scene):
         self.scene = scene
 
     def quit(self):

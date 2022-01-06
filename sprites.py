@@ -2,6 +2,7 @@
 Sprites used in the game: the bird and the pipe.
 """
 import enum
+import math
 
 import pygame as pg
 
@@ -24,7 +25,7 @@ class MovableSprite(pg.sprite.Sprite):
 
 class Bird(MovableSprite):
     def __init__(self, game, image: pg.Surface, x, y):
-        self._layer = 2  # required for pygame.sprite.LayeredUpdates: set before adding it to the group!
+        self._layer = 3  # required for pygame.sprite.LayeredUpdates: set before adding it to the group!
         super().__init__(game.all_sprites, game.birds)
         self._game = game
         self.image = image
@@ -32,32 +33,31 @@ class Bird(MovableSprite):
         self.rect = image.get_rect(x=x, y=y)
         self._vel_y = 0
         self.score = 0
+        self.angle = 0
 
     def update(self, *args):
         # check whether the bird flies outside the boundary
         # whether it hits a pipe
         if self.rect.top > SCREEN_HEIGHT or self.rect.bottom < 0:
-            if self._game.music_on:
-                pg.mixer.Sound(path.join(SND_DIR, 'die.wav')).play()
             self.kill()
             return
         if pg.sprite.spritecollideany(self, self._game.pipes):
-            if self._game.music_on:
-                pg.mixer.Sound(path.join(SND_DIR, 'hit.wav')).play()
             self.kill()
             return
         self._vel_y = min(self._vel_y + GRAVITY_ACC, BIRD_MAX_Y_SPEED)
         self.rect.y += self._vel_y
         # rotate the bird according to how it is moving: [-4, 4] -> 40 degree
+        # TODO: ANGLES!
         angle = 40 - (self._vel_y + 4) / 8 * 80
-        angle = min(30, max(angle, -30))
-        self.image = pg.transform.rotate(self.origin_image, angle)
+        self.angle = min(30, max(angle, -30))
+        self.image = pg.transform.rotate(self.origin_image, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def flap(self):
         self._vel_y = JUMP_SPEED
-        if self._game.music_on:
-            pg.mixer.Sound(path.join(SND_DIR, 'wing.wav')).play()
+
+    def shoot(self, bullet):
+        bullet.launch(self.angle)
 
     @property
     def vel_y(self):
@@ -102,6 +102,35 @@ class Pipe(MovableSprite):
             self.rect.bottom = SCREEN_HEIGHT
         self.gap = 0
         self.length = length
+
+
+class Rock(MovableSprite):
+
+    def __init__(self, game, image: pg.Surface, x, y):
+        self._layer = 2
+        super().__init__(game.all_sprites, game.rocks)
+        self._game = game
+        self.image = image
+        self.rect = image.get_rect(x=x, y=y)
+
+    def kill(self):
+        super().kill()
+
+# TODO: ANGLES!
+class Bullet(MovableSprite):
+
+    def __init__(self, game, image: pg.Surface, x, y, angle):
+        self._layer = 1
+        super().__init__(game.all_sprites, game.bullets)
+        self._game = game
+        self.image = image
+        self.origin_image = self.image
+        self.rect = self.image.get_rect(x=x, y=y)
+        self.angle = angle
+        # self.image = pg.transform.rotate(self.origin_image, self.angle)
+
+    def moveby(self, dx=0, dy=0):
+        self.rect.move_ip(dx, dx * math.tan(math.degrees(self.angle)))
 
 
 class Background(pg.sprite.Sprite):

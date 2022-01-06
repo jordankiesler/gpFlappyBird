@@ -32,11 +32,14 @@ class Game:
 
         self._bird_image = None
         self._pipe_images = None
+        self._rock_image = None         # Added
         self._background_image = None
 
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.birds = pg.sprite.Group()
         self.pipes = pg.sprite.Group()
+        self.rocks = pg.sprite.Group()  # Added
+        self.bullets = pg.sprite.Group()  # Added
         self._load_images()
         self._human_bird = None
 
@@ -54,6 +57,7 @@ class Game:
 
         # create the initial population
         self.pop = cgp.create_population(self.n_birds)
+        self.x=0
 
     def reset(self):
         if VERBOSE:
@@ -71,9 +75,10 @@ class Game:
             y = random.randint(SCREEN_HEIGHT // 4, SCREEN_HEIGHT // 4 * 3)
             AIBird(self, self._bird_image, x, y, self.pop[i])
         # instantiate the pipes
-        self._spawn_pipe(80)  # the first pipe with xas the baseline
+        self._spawn_pipe(80)  # the first pipe with x as the baseline
         while self._front_pipe.rect.x < SCREEN_WIDTH:
             self._spawn_pipe()
+            Rock(self, self._rock_image, random.randint(50, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
         # create the background
         Background(self, self._background_image)
 
@@ -81,7 +86,6 @@ class Game:
         """
         Load images
         """
-
         def _load_one_image(file_name):
             return pg.image.load(os.path.join(IMG_DIR, file_name)).convert_alpha()
 
@@ -89,10 +93,12 @@ class Game:
         self._pipe_images = [_load_one_image(name) for name in ['pipetop.png', 'pipebottom.png']]
         self._background_image = _load_one_image('background.png')
         self._blue_bird_image = _load_one_image('bluebird.png')
+        self._rock_image = _load_one_image('rock.png')  # Added
+        self._bullet_image = _load_one_image('bullet.png') # Added
 
     def _spawn_pipe(self, front_x=None):
         """
-        Create a new pair of pipes in the font.
+        Create a new pair of pipes in the front.
         @:param front_x the x coordinate of the currently most front pipe. If None, then set self._front_pipe.rect.x
         """
         if front_x is None:
@@ -244,20 +250,41 @@ class Game:
         if leading_bird.rect.x < SCREEN_WIDTH / 3:
             for bird in self.birds:
                 bird.moveby(dx=BIRD_X_SPEED)
+            for bullet in self.bullets:
+                bullet.moveby(dx=3)
         else:
             for pipe in self.pipes:
                 pipe.moveby(dx=-BIRD_X_SPEED)
                 if pipe.rect.x < -50:
                     pipe.kill()
+            for rock in self.rocks:
+                rock.moveby(dx=-BIRD_X_SPEED)
+                if rock.rect.x < -50:
+                    rock.kill()
+            # TODO: Angles!
+            for bullet in self.bullets:
+                bullet.moveby(dx=3)
+                if bullet.rect.x > SCREEN_WIDTH or SCREEN_HEIGHT < bullet.rect.y < -10:
+                    bullet.kill()
         # count the score: one point per frame
         for bird in self.birds:
             bird.score += 1  # when a bird dies, its score will be set to the CGP individual's fitness automatically
 
+            # TODO: Pew pew!
+            if bird.score%50 == 0:
+                Bullet(self, self._bullet_image, bird.rect.x, bird.rect.y, bird.angle)
+
+        for rock in self.rocks:
+            if pg.sprite.spritecollideany(rock, self.bullets):
+                rock.kill()
+
         self._max_score += 1
         self._max_score_so_far = max(self._max_score_so_far, self._max_score)
+
         # spawn a new pipe if necessary
         while self._front_pipe.rect.x < SCREEN_WIDTH:
             self._spawn_pipe()
+            Rock(self, self._rock_image, random.randint(SCREEN_WIDTH, SCREEN_WIDTH*1.5), random.randint(100, 400))
 
     def _draw(self):
         self.all_sprites.draw(self._screen)
