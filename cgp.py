@@ -2,6 +2,7 @@ import copy
 import operator as op
 import random
 import math
+from settings import *
 
 
 class Function:
@@ -50,7 +51,7 @@ class Individual:
         self.weightMax = 1                      # Max weight for each input
         self.numInputs = 5                      # Set the number of inputs - currently 5 - v, g, h, vr, and hr
         self.numOutputs = 2                     # Set the number of outputs for the graph
-        self.numNodes = 250                     # Set the number of nodes for each genotype
+        self.numNodes = N_COLS                  # Set the number of nodes for each genotype
         self.nodes = []                         # Initialize empty list to hold all the node objects
         self.totalFitness = 0                   # Initialize totalFitness value of the genotype to 0
         self.distanceFitness = 0                # Initialize distanceFitness value of the genotype to 0

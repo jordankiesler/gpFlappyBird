@@ -34,7 +34,7 @@ class Plane(MovableSprite):
         self.yVelocity = 0
         self.distanceScore = 0
         self.targetScore = 0
-        self.totalScore = self.distanceScore + (50 * self.targetScore)
+        self.totalScore = self.distanceScore + (WEIGHT_TARGETS * self.targetScore)
         self.angle = 0
 
     def update(self, *args):
@@ -44,30 +44,32 @@ class Plane(MovableSprite):
             self.kill()
             return
         if pg.sprite.spritecollideany(self, self.game.radars):
+            # If the plane makes a distance score over 1000, more heavily weight it to select from those parents
             if self.distanceScore > 1000:
                 settings.MU_WEIGHTS = [10, 20, 30, 55, 80, 90, 100]
             self.kill()
             return
-        if self.distanceScore > 5000:
-            settings.MU = [2, 1, 1]
-            settings.MU_WEIGHTS = [10, 20, 90, 100]
+        # Assumed that if the plane can make it that far, it can traverse the radar infinitely, so kill and restart
+        # If the plane makes it all the way, even more heavily weight it to choose from the distance parents
+        if self.distanceScore >= PLANE_MAX_DISTANCE_ALLOWED:
+            settings.MU_WEIGHTS = [7, 14, 21, 45, 69, 93, 100]
             self.kill()
             return
-        self.yVelocity = min(self.yVelocity + GRAVITY_ACC, PLANE_MAX_Y_SPEED)
+        self.yVelocity = self.yVelocity
         self.rect.y += self.yVelocity
         # rotate the plane according to how it is moving: [-4, 4] -> 40 degree
         angle = 40 - (self.yVelocity + 4) / 8 * 80
         self.angle = min(30, max(angle, -30))
         self.image = pg.transform.rotate(self.originImage, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
-        self.totalScore = self.distanceScore + (10 * self.targetScore)
+        self.totalScore = self.distanceScore + (WEIGHT_TARGETS * self.targetScore)
         # self.totalScore = self.distanceScore + max(0, 50 * self.targetScore)
 
     def turnLeft(self):
-        self.yVelocity = JUMP_SPEED
+        self.yVelocity = PLANE_Y_SPEED
 
     def turnRight(self):
-        self.yVelocity = -JUMP_SPEED
+        self.yVelocity = -PLANE_Y_SPEED
 
     def goStraight(self):
         self.yVelocity = 0

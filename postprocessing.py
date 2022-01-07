@@ -30,9 +30,9 @@ DEFAULT_SYMBOLIC_FUNCTION_MAP = {
 }
 
 
-def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTargetScoreSoFar, maxTotalScore,
-                   maxDistanceScore, maxTargetScore, maxTotalList, maxTotalSoFarList, maxDistanceList,
-                   maxDistanceSoFarList, maxTargetList, maxTargetSoFarList):
+def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTargetScoreSoFar,
+                   maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList, maxTargetList,
+                   maxTargetSoFarList, bestPlaneScoresList):
 
     content = open('./pp/numRuns.txt', 'r').readlines()
     runNum = int(content[0])
@@ -40,6 +40,8 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
     out = open('./pp/numRuns.txt', 'w')
     out.writelines(content)
     out.close()
+
+    sortedPlanes = sorted(bestPlaneScoresList, key=lambda score: score[0])
 
     # Open the file in append & read mode ('a+')
     with open("./pp/trainingData.txt", "a+") as file:
@@ -50,18 +52,30 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
                f"Maximum Total Score: {maxTotalScoreSoFar} \n" \
                f"Maximum Distance Score: {maxDistanceScoreSoFar} \n" \
                f"Maximum Target Score: {maxTargetScoreSoFar} \n" \
-               f"Final Iteration Last Surviving Total Score: {maxTotalScore} \n" \
-               f"Final Iteration Last Surviving Distance Score: {maxDistanceScore} \n" \
-               f"Final Iteration Last Surviving Target Score: {maxTargetScore} \n" \
+               f"Best Overall Total Score: {sortedPlanes[-1][0]} \n" \
+               f"Distance Score of Best Overall: {sortedPlanes[-1][1]} \n" \
+               f"Target Score of Best Overall: {sortedPlanes[-1][2]} \n" \
+               f"\nPARAMETERS:\n" \
                f"Random Seed: {RANDOM_SEED} \n" \
-               f"Mu: {MU}   Lambda: {LAMBDA} \n" \
+               f"Mu: {MU}   Mu Weights: {MU_WEIGHTS}    Lambda: {LAMBDA} \n" \
                f"Population Size: {sum(MU) + LAMBDA}\n" \
+               f"Maximum Allowed Distance: {PLANE_MAX_DISTANCE_ALLOWED} \n" \
+               f"Plane Y Speed: {PLANE_Y_SPEED}     Plane X Speed: {PLANE_X_SPEED}\n" \
+               f"Multi-Objective Weight Function: distanceScore + ({WEIGHT_TARGETS} * targetScore)\n" \
+               f"Range of Horizontal Space between Adjacent Radar Pairs: {MIN_RADAR_SPACE} - {MAX_RADAR_SPACE}\n" \
+               f"Range of Gap (Vertical Space) between Pair of Radars:  {MIN_RADAR_GAP} - {MAX_RADAR_GAP}\n" \
+               f"Minimum Length of Radar Beam: {MIN_RADAR_LENGTH}\n" \
+               f"Mutation Probability (Weighted for low maximum total scores): {MUT_PB}\n" \
+               f"Number of Columns: {N_COLS}\n" \
+               f"Number of Levels Back: {LEVEL_BACK}\n" \
+               f"\nLISTS:\n" \
                f"List of Best in Generation for Total Score: {maxTotalList} \n" \
                f"List of Best in All Previous Generations for Total Score: {maxTotalSoFarList} \n" \
                f"List of Best in Generation for Distance Score: {maxDistanceList} \n" \
                f"List of Best in All Previous Generations for Distance Score: {maxDistanceSoFarList} \n" \
                f"List of Best in Generation for Target Score: {maxTargetList} \n" \
-               f"List of Best in All Previous Generations for Target Score: {maxTargetSoFarList} \n"
+               f"List of Best in All Previous Generations for Target Score: {maxTargetSoFarList} \n" \
+               f"List of Scores for the Best Overall Plane in Each Generation: {bestPlaneScoresList}"
 
             # Move read cursor to the start of file.
         file.seek(0)

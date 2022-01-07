@@ -13,14 +13,15 @@ def main():
         game.reset()
         game.run()
 
-    plotData(game.currentGeneration, game.maxTotalList, game.maxTotalSoFarList, game.maxDistanceList,
-             game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList)
+    if PP_PLOT_DATA:
+        plotData(game.currentGeneration, game.maxTotalList, game.maxTotalSoFarList, game.maxDistanceList,
+                 game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList)
 
     if PP_WRITE_TO_TEXT:
         writeRunToFile(game.currentGeneration, game.maxTotalScoreSoFar, game.maxDistanceScoreSoFar,
-                       game.maxTargetScoreSoFar, game.maxTotalScore, game.maxDistanceScore, game.maxTargetScore,
-                       game.maxTotalList, game.maxTotalSoFarList, game.maxDistanceList, game.maxDistanceSoFarList,
-                       game.maxTargetList, game.maxTargetSoFarList)
+                       game.maxTargetScoreSoFar, game.maxTotalList, game.maxTotalSoFarList,
+                       game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList,
+                       game.bestPlaneScoresList)
 
     if PP_FORMULA or PP_GRAPH_VISUALIZATION:
         gs = [extract_computational_subgraph(ind) for ind in game.pop]

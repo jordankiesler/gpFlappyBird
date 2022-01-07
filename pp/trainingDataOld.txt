@@ -1,0 +1,241 @@
+--TRAINING DATA FOR EACH RUN--
+
+--RUN 0--
+Generations:
+Maximum Total Score:
+Maximum Distance Score:
+Maximum Target Score:
+Final Iteration Best Total Score:
+Final Iteration Best Total Score Distance:
+Final Iteration Best Total Score Targets:
+Random Seed:
+Mu:
+Lambda:
+
+--RUN 1--
+Generations: 16
+Maximum Total Score: 903
+Maximum Distance Score: 376
+Maximum Target Score: 24
+Final Iteration Last Surviving Total Score: 26
+Final Iteration Last Surviving Distance Score: 27
+Final Iteration Last Surviving Target Score: 0
+Random Seed: 71594
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+List of Best in Generation for Total Score: [0, 387, 184, 132, 160, 181, -2622, -1235, 494, -63, 193, 109, -2608, 227, 255, 213]
+List of Best in All Previous Generations for Total Score: [0, 387, 387, 387, 387, 387, 387, 903, 903, 903, 903, 903, 903, 903, 903, 903]
+List of Best in Generation for Distance Score: [0, 148, 185, 133, 161, 182, 229, 206, 255, 208, 194, 110, 243, 228, 376, 214]
+List of Best in All Previous Generations for Distance Score: [0, 148, 185, 185, 185, 185, 229, 229, 255, 255, 255, 255, 255, 255, 376, 376]
+List of Best in Generation for Target Score: [0, 8, 0, 0, 0, 0, -96, -49, 8, -9, 0, 0, -96, 0, -5, 0]
+List of Best in All Previous Generations for Target Score: [0, 8, 8, 8, 8, 8, 8, 24, 24, 24, 24, 24, 24, 24, 24, 24]
+
+
+--RUN 2--
+Generations: 50
+Maximum Total Score: 7820
+Maximum Distance Score: 5001
+Maximum Target Score: 96
+Final Iteration Last Surviving Total Score: 2279
+Final Iteration Last Surviving Distance Score: 2040
+Final Iteration Last Surviving Target Score: 8
+Random Seed: 17237
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+List of Best in Generation for Total Score: [0, 78, 414, 389, 173, 106, -1621, -1656, -1462, -4692, 430, -6771, -21432, -29639, -3758, -12974, -7428, -36010, 1207, 618, 2706, 341, 759, 460, 436, 121, 862, 1547, 564, 859, 340, 4088, 2151, 390, 3223, 769, 3927, 675, 691, 1422, 829, 7820, 2465, 2579, 1820, 2824, 1851, 451, 2686, 619]
+List of Best in All Previous Generations for Total Score: [0, 78, 414, 414, 414, 414, 663, 663, 663, 663, 663, 782, 782, 782, 782, 782, 782, 1355, 1355, 1494, 2953, 2953, 2953, 2953, 2953, 2953, 2953, 2953, 2953, 2953, 2953, 4088, 4088, 4088, 4088, 4088, 4346, 4346, 4346, 4346, 4346, 7820, 7820, 7820, 7820, 7820, 7820, 7820, 7820, 7820]
+List of Best in Generation for Distance Score: [0, 79, 415, 390, 174, 107, 330, 205, 189, 379, 431, 730, 2269, 2222, 593, 1277, 1183, 5001, 1208, 1189, 2287, 432, 580, 1181, 437, 362, 653, 768, 595, 950, 341, 2979, 1402, 391, 2174, 950, 3538, 556, 692, 913, 1430, 5001, 1116, 2370, 1461, 2165, 1492, 692, 1457, 470]
+List of Best in All Previous Generations for Distance Score: [0, 79, 415, 415, 415, 415, 415, 415, 415, 415, 431, 730, 2269, 2269, 2269, 2269, 2269, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001]
+List of Best in Generation for Target Score: [0, 0, 0, 0, 0, 0, -66, -63, -56, -170, 0, -251, -791, -1063, -145, -476, -287, -1367, 0, -19, 14, -3, 6, -24, 0, -8, 7, 26, -1, -3, 0, 37, 25, 0, 35, -6, 13, 4, 0, 17, -20, 94, 45, 7, 12, 22, 12, -8, 41, 5]
+List of Best in All Previous Generations for Target Score: [0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 27, 27, 27, 27, 27, 27, 27, 47, 47, 47, 47, 47, 47, 47, 61, 61, 61, 61, 61, 61, 61, 96, 96, 96, 96, 96, 96, 96, 96, 96]
+
+
+--RUN 3--
+Generations: 7
+Maximum Total Score: 329
+Maximum Distance Score: 336
+Maximum Target Score: 8
+Final Iteration Last Surviving Total Score: 52
+Final Iteration Last Surviving Distance Score: 53
+Final Iteration Last Surviving Target Score: 0
+Random Seed: 68831
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+List of Best in Generation for Total Score: [0, 181, 329, 235, -475, 79, 164]
+List of Best in All Previous Generations for Total Score: [0, 181, 329, 329, 329, 329, 329]
+List of Best in Generation for Distance Score: [0, 182, 330, 156, 336, 80, 165]
+List of Best in All Previous Generations for Distance Score: [0, 182, 330, 330, 336, 336, 336]
+List of Best in Generation for Target Score: [0, 0, 0, 8, -81, 0, 0]
+List of Best in All Previous Generations for Target Score: [0, 0, 0, 8, 8, 8, 8]
+
+
+--RUN 4--
+Generations: 50
+Maximum Total Score: 1074
+Maximum Distance Score: 5001
+Maximum Target Score: 24
+Final Iteration Last Surviving Total Score: -7490
+Final Iteration Last Surviving Distance Score: 4371
+Final Iteration Last Surviving Target Score: -1187
+Random Seed: 63565
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+List of Best in Generation for Total Score: [0, 225, -69, -307, 192, 243, -277, -33, 1074, -16208, -26037, -17338, 135, -43, 154, 136, 149, 152, 133, -719, 230, -176, 158, 145, -536, -148, -562, -382, 0, -744, -9020, -8690, -9880, -8572, -9180, -7055, -5271, -8120, -8820, -8664, -6451, -1490, -8910, -7350, -9390, -9000, -2140, -3388, -1251, -7840]
+List of Best in All Previous Generations for Total Score: [0, 225, 260, 260, 260, 260, 343, 343, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074, 1074]
+List of Best in Generation for Distance Score: [0, 226, 262, 224, 193, 164, 584, 548, 985, 2243, 3504, 2493, 136, 248, 155, 137, 150, 153, 134, 302, 301, 545, 159, 146, 495, 863, 689, 789, 501, 757, 5001, 5001, 5001, 4539, 5001, 3916, 3050, 5001, 5001, 4577, 3320, 901, 5001, 5001, 5001, 5001, 1291, 1853, 1160, 5001]
+List of Best in All Previous Generations for Distance Score: [0, 226, 262, 262, 262, 262, 584, 584, 985, 2243, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 3504, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001]
+List of Best in Generation for Target Score: [0, 0, -33, -54, 0, 8, -86, -58, 9, -1846, -2955, -1984, 0, -30, 0, 0, 0, 0, 0, -103, -8, -72, 0, 0, -103, -102, -126, -117, -50, -150, -1403, -1369, -1488, -1311, -1419, -1098, -832, -1312, -1382, -1324, -978, -240, -1391, -1235, -1440, -1401, -343, -524, -241, -1285]
+List of Best in All Previous Generations for Target Score: [0, 0, 0, 0, 0, 8, 16, 16, 16, 16, 16, 16, 16, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24]
+
+
+--RUN 5--
+Generations: 50
+Maximum Total Score: 423
+Maximum Distance Score: 5001
+Maximum Target Score: 24
+Final Iteration Last Surviving Total Score: -623
+Final Iteration Last Surviving Distance Score: 228
+Final Iteration Last Surviving Target Score: -86
+Random Seed: 6610
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+List of Best in Generation for Total Score: [0, 73, -35740, -27783, -34860, -36150, -37110, -36390, 144, 262, 210, 263, 222, 150, 90, 237, 143, -4046, -1991, -7738, -4374, -4470, -12154, -10009, -14066, -26864, 97, -12218, -9563, -803, -14417, -5497, -3008, -4531, 133, -8194, -6976, -1697, -18906, -1874, -10116, -14180, -6447, -5968, -13311, -8908, -2228, -22977, -1852, -1371]
+List of Best in All Previous Generations for Total Score: [0, 73, 234, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423, 423]
+List of Best in Generation for Distance Score: [0, 74, 5001, 3858, 5001, 5001, 5001, 5001, 145, 183, 131, 184, 223, 151, 91, 158, 144, 665, 450, 1253, 777, 761, 1817, 1482, 2055, 3927, 98, 1963, 1518, 248, 2274, 814, 563, 830, 134, 1307, 1035, 364, 2915, 357, 1645, 1971, 994, 903, 2020, 1423, 423, 3334, 399, 310]
+List of Best in All Previous Generations for Distance Score: [0, 74, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001]
+List of Best in Generation for Target Score: [0, 0, -4075, -3165, -3987, -4116, -4212, -4132, 0, 8, 8, 7, 0, 0, 0, 8, 0, -472, -245, -900, -516, -524, -1398, -1150, -1613, -3080, 0, -1419, -1109, -106, -1670, -632, -358, -537, 0, -951, -802, -207, -2175, -224, -1177, -1616, -745, -688, -1534, -1034, -266, -2632, -226, -169]
+List of Best in All Previous Generations for Target Score: [0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24]
+
+
+--RUN 6--
+Generations: 50
+Maximum Total Score: 6230
+Maximum Distance Score: 5001
+Maximum Target Score: 134
+Final Iteration Last Surviving Total Score: 4630
+Final Iteration Last Surviving Distance Score: 5001
+Final Iteration Last Surviving Target Score: -37
+Random Seed: 86090
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+List of Best in Generation for Total Score: [0, -4990, -2669, -632, 191, 96, -284, 45, -39, -1770, 90, 63, 169, 386, 153, 387, 146, 168, 172, 172, 341, 300, 86, 193, 98, 126, 229, 96, -10305, -1697, -1316, 1078, -5006, 1075, 1096, 2353, 385, 6230, -11030, -10040, 4280, -7340, 4450, -5500, -12970, 4830, -8540, -7500, -12730, -7500]
+List of Best in All Previous Generations for Total Score: [0, 263, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 343, 386, 386, 387, 387, 387, 387, 387, 387, 387, 387, 387, 387, 387, 387, 387, 387, 443, 443, 1078, 1078, 1078, 1096, 2353, 2353, 6230, 6230, 6230, 6230, 6230, 6230, 6230, 6230, 6230, 6230, 6230, 6230, 6230]
+List of Best in Generation for Distance Score: [0, 881, 552, 219, 192, 97, 217, 306, 232, 381, 91, 64, 170, 387, 154, 388, 147, 169, 173, 173, 342, 301, 87, 294, 99, 127, 230, 97, 2526, 1664, 385, 1469, 1285, 1176, 1267, 2164, 456, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001]
+List of Best in All Previous Generations for Distance Score: [0, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 881, 2526, 2526, 2526, 2526, 2526, 2526, 2526, 2526, 2526, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001, 5001]
+List of Best in Generation for Target Score: [0, -588, -323, -86, 0, 0, -51, -26, -27, -216, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 8, 0, 0, -1284, -336, -170, -39, -630, -11, -17, 19, -7, 123, -1604, -1505, -72, -1234, -55, -1051, -1797, -17, -1354, -1251, -1774, -1251]
+List of Best in All Previous Generations for Target Score: [0, 8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 27, 27, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134]
+
+
+--RUN 7--
+Generations: 50
+Maximum Total Score: 6237.5
+Maximum Distance Score: 7500
+Maximum Target Score: 3
+Final Iteration Last Surviving Total Score: -286.0
+Final Iteration Last Surviving Distance Score: 7500
+Final Iteration Last Surviving Target Score: -778.5
+Random Seed: 71959
+Mu: [3, 2, 2]   Lambda: 23
+Population Size: 30
+Maximum Allowed Distance: 7500List of Best in Generation for Total Score: [0, 334, 201, 417.0, 669.5, 425.5, -269.5, 125.0, 2003.5, 569.0, 323, 1152.5, 896, 297, 1081.0, 1259.5, 329, 1363.0, 1152.0, 938.0, 125.0, -124.5, -355.0, -17.0, -528.5, -1150.0, -1336.5, -480.5, 1508.0, 236.0, 242.0, 1300.5, 446.5, 215.5, 491.5, -378.0, -286.0, 411.5, 371.0, 393.0, 25.5, 1561.5, 160.5, -398.5, 108.5, 487.5, 311.5, 214.0, 313.0, 61.5]
+List of Best in All Previous Generations for Total Score: [0, 334, 334, 417.0, 680.0, 680.0, 680.0, 680.0, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 2003.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5, 6237.5]
+List of Best in Generation for Distance Score: [0, 335, 202, 473, 783, 504, 1679, 781, 2217, 570, 314, 1421, 887, 298, 1182, 1498, 330, 1544, 1243, 1124, 646, 869, 2061, 724, 2555, 5831, 6062, 2148, 1574, 1662, 2383, 1654, 7500, 1724, 7500, 4413, 7500, 7500, 2477, 6729, 6339, 1715, 1124, 7500, 572, 481, 7500, 7500, 1234, 7500]
+List of Best in All Previous Generations for Distance Score: [0, 335, 335, 473, 783, 783, 1679, 1679, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2217, 2555, 5831, 6062, 6062, 6062, 6062, 6062, 6062, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500]
+List of Best in Generation for Target Score: [0, 0, 0, -5.5, -11.5, -7.75, -194.75, -65.75, -21.25, 0.0, 1, -27.0, 1, 0, -10.25, -23.75, 0, -17.0, -9.0, -18.5, -52.0, -99.25, -241.5, -74.25, -308.5, -698.25, -739.75, -263.0, -6.5, -142.5, -214.0, -35.25, -705.25, -150.75, -700.75, -479.0, -778.5, -708.75, -210.5, -633.5, -631.25, -15.25, -96.25, -789.75, -46.25, 0.5, -718.75, -728.75, -92.0, -744.0]
+List of Best in All Previous Generations for Target Score: [0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+
+--RUN 8--
+Generations: 50
+Maximum Total Score: 470
+Maximum Distance Score: 855
+Maximum Target Score: 2
+Final Iteration Last Surviving Total Score: 47.0
+Final Iteration Last Surviving Distance Score: 303
+Final Iteration Last Surviving Target Score: -26.0
+
+PARAMETERS:
+Random Seed: 61563
+Mu: [3, 2, 2]   Mu Weights: [15, 30, 44, 58, 72, 86, 100]    Lambda: 23
+Population Size: 30
+Maximum Allowed Distance: 7500
+Plane Y Speed: -3.5     Plane X Speed: 3
+Multi-Objective Weight Function: distanceScore + (10 * targetScore)Range of Horizontal Space between Adjacent Radar Pairs: 175 - 320
+Range of Gap (Vertical Space) between Pair of Radars:  100 - 150
+Minimum Length of Radar Beam: 80
+Mutation Probability (Weighted for low maximum total scores): 0.015
+Number of Columns: 250
+Number of Levels Back: 250
+
+LISTS:
+List of Best in Generation for Total Score: [0, 140, 150, 78, 248.0, 132, 170.0, 34.0, 151, 93, 138, 80, 258, 110, 218, 470, 147, 127, 183, 160, 171, 144, 159, -639.0, -1185.0, -617.0, -188.0, 189.0, -53.0, -1276.0, -547.0, 142, 171, 161, 161, 175, 160, 179.0, 87, 80, 454.0, -470.0, 85, 79, 158, 240.0, 81, 159, -357.0, 52.0]
+List of Best in All Previous Generations for Total Score: [0, 140, 150, 150, 252, 252, 252, 252, 252, 252, 252, 252, 258, 258, 258, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470, 470]
+List of Best in Generation for Distance Score: [0, 141, 151, 79, 254, 133, 186, 235, 152, 94, 139, 81, 259, 111, 219, 471, 148, 128, 174, 161, 152, 145, 160, 507, 471, 324, 328, 185, 213, 855, 489, 143, 172, 162, 162, 166, 161, 240, 88, 81, 460, 411, 86, 80, 149, 291, 82, 160, 274, 193]
+List of Best in All Previous Generations for Distance Score: [0, 141, 151, 151, 254, 254, 254, 254, 254, 254, 254, 254, 259, 259, 259, 471, 471, 471, 471, 471, 471, 471, 471, 507, 507, 507, 507, 507, 507, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855, 855]
+List of Best in Generation for Target Score: [0, 0, 0, 0, -0.5, 0, -1.5, -20.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, -114.5, -166.0, -93.5, -51.5, -15.0, -27.0, -213.0, -104.0, 0, 0, 0, 0, 1, 0, -6.5, 0, 0, -0.5, -88.5, 0, 0, 1, -5.0, 0, 0, -63.5, -14.0]
+List of Best in All Previous Generations for Target Score: [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+
+
+--RUN 9--
+Generations: 50
+Maximum Total Score: 5164.0
+Maximum Distance Score: 7500
+Maximum Target Score: 4
+Final Iteration Last Surviving Total Score: 4659.0
+Final Iteration Last Surviving Distance Score: 7500
+Final Iteration Last Surviving Target Score: -284.5
+
+PARAMETERS:
+Random Seed: 63792
+Mu: [3, 2, 2]   Mu Weights: [15, 30, 44, 58, 72, 86, 100]    Lambda: 23
+Population Size: 30
+Maximum Allowed Distance: 7500
+Plane Y Speed: -3.5     Plane X Speed: 3
+Multi-Objective Weight Function: distanceScore + (10 * targetScore)
+Range of Horizontal Space between Adjacent Radar Pairs: 175 - 340
+Range of Gap (Vertical Space) between Pair of Radars:  120 - 180
+Minimum Length of Radar Beam: 80
+Mutation Probability (Weighted for low maximum total scores): 0.015
+Number of Columns: 250
+Number of Levels Back: 250
+
+LISTS:
+List of Best in Generation for Total Score: [0, 483.0, -1182.0, 91, 167, 317.0, -82.0, 85, -451.0, 150, 1751.0, -2465.0, 1385.0, -7126.0, -6956.0, -6961.0, -7166.0, -7236.0, -7101.0, -7326.0, -7346.0, -7431.0, -7296.0, -7181.0, 2697.0, 495, 609.0, 432.0, 1247.0, 435.0, 2200.0, 594.0, 720.0, 774.0, 3135.0, 592.0, 959.0, 896.0, 401, 4589.0, 4999.0, 5164.0, 4774.0, 4869.0, 4849.0, 4729.0, 4604.0, 4939.0, 4304.0, 4789.0]
+List of Best in All Previous Generations for Total Score: [0, 483.0, 483.0, 483.0, 483.0, 483.0, 483.0, 483.0, 483.0, 483.0, 1751.0, 1751.0, 1751.0, 1751.0, 1751.0, 1751.0, 1751.0, 1751.0, 1751.0, 1751.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4026.0, 4589.0, 4999.0, 5164.0, 5164.0, 5164.0, 5164.0, 5164.0, 5164.0, 5164.0, 5164.0, 5164.0]
+List of Best in Generation for Distance Score: [0, 484, 579, 92, 168, 358, 244, 86, 300, 141, 1862, 1536, 1496, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 2863, 496, 625, 443, 1263, 476, 2296, 710, 736, 1110, 3491, 598, 1050, 1032, 402, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500]
+List of Best in All Previous Generations for Distance Score: [0, 484, 579, 579, 579, 579, 579, 579, 579, 579, 1862, 1862, 1862, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500]
+List of Best in Generation for Target Score: [0, 0.0, -176.5, 0, 0, -4.0, -33.0, 0, -75.5, 1, -11.0, -400.5, -11.5, -1462.5, -1446.0, -1446.0, -1466.5, -1474.0, -1460.5, -1482.5, -1484.5, -1493.5, -1479.5, -1468.5, -16.5, 0, -2.0, -1.0, -1.5, -4.0, -9.5, -11.5, -2.0, -33.5, -35.5, -0.5, -9.0, -13.5, 0, -291.0, -250.0, -233.5, -272.5, -263.0, -265.0, -277.0, -289.5, -256.0, -319.5, -271.0]
+List of Best in All Previous Generations for Target Score: [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+
+
+--RUN 10--
+Generations: 50
+Maximum Total Score: 1232.0
+Maximum Distance Score: 1884
+Maximum Target Score: 2
+Best Overall Total Score: 1232.0
+Distance Score of Best Overall: 1853
+Target Score of Best Overall: -62.5
+
+PARAMETERS:
+Random Seed: 55363
+Mu: [3, 2, 2]   Mu Weights: [15, 30, 44, 58, 72, 86, 100]    Lambda: 23
+Population Size: 30
+Maximum Allowed Distance: 7500
+Plane Y Speed: -3.5     Plane X Speed: 3
+Multi-Objective Weight Function: distanceScore + (10 * targetScore)
+Range of Horizontal Space between Adjacent Radar Pairs: 175 - 340
+Range of Gap (Vertical Space) between Pair of Radars:  120 - 180
+Minimum Length of Radar Beam: 80
+Mutation Probability (Weighted for low maximum total scores): 0.015
+Number of Columns: 250
+Number of Levels Back: 250
+
+LISTS:
+List of Best in Generation for Total Score: [0, 268, -1033.0, -2490.0, -831.0, 171, 86, -261.0, -86.0, 87.0, 388, 240, 324, 292, -1352.0, 210.0, 708.0, 274.0, 215.0, 1159.0, 193.0, 190, 89, 410.0, -153.0, 312, 222.0, 308.0, 322.0, 1213.0, 443.0, -659.0, 298.0, 462, -39.0, -179.0, 198, 421, 528, 116, 362, -212.0, 137.0, 303, -77.0, 234.0, -168.0, 155, 106, -1059.0]
+List of Best in All Previous Generations for Total Score: [0, 268, 268, 268, 268, 268, 268, 268, 268, 268, 388, 388, 388, 388, 388, 388, 764.0, 764.0, 764.0, 1159.0, 1159.0, 1159.0, 1159.0, 1159.0, 1159.0, 1159.0, 1159.0, 1159.0, 1159.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0, 1232.0]
+List of Best in Generation for Distance Score: [0, 269, 478, 971, 420, 172, 87, 245, 205, 308, 389, 241, 325, 293, 529, 496, 799, 495, 401, 1750, 319, 181, 90, 516, 258, 313, 348, 534, 463, 1884, 729, 397, 459, 463, 277, 262, 199, 422, 529, 117, 363, 269, 188, 304, 704, 275, 378, 156, 107, 457]
+List of Best in All Previous Generations for Distance Score: [0, 269, 478, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 971, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1750, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884, 1884]
+List of Best in Generation for Target Score: [0, 0, -151.5, -346.5, -125.5, 0, 0, -51.0, -29.5, -22.5, 0, 0, 0, 0, -188.5, -28.5, -9.5, -22.0, -18.5, -59.0, -12.5, 1, 0, -10.5, -41.0, 0, -12.5, -22.5, -14.0, -67.0, -28.5, -106.0, -16.0, 0, -31.5, -44.0, 0, 0, 0, 0, 0, -48.0, -5.0, 0, -78.0, -4.0, -55.0, 0, 0, -152.0]
+List of Best in All Previous Generations for Target Score: [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+List of Scores for the Best Overall Plane in Each Generation: [[0, 0, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [268, 269, 0], [388, 389, 0], [388, 389, 0], [388, 389, 0], [388, 389, 0], [388, 389, 0], [388, 389, 0], [764.0, 785, -2.5], [764.0, 785, -2.5], [764.0, 785, -2.5], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1159.0, 1750, -59.0], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5], [1232.0, 1853, -62.5]]
