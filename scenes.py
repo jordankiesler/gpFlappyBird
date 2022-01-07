@@ -24,7 +24,7 @@ class SceneManager:
         while self._running:
             if pg.event.get(pg.QUIT):  # if any QUIT event in the queue
                 self.quit()
-            self.scene.handle_events()
+            self.scene.handleEvents()
             self.scene.update()
             self.scene.draw()
             pg.display.update()
@@ -44,7 +44,7 @@ class AbstractScene:
     def __init__(self, manager):
         self.manager = manager
 
-    def handle_events(self):
+    def handleEvents(self):
         raise NotImplementedError()
 
     def update(self):

@@ -58,7 +58,7 @@ class Genotype:
         self.numOutputs = 1                 # Set the number of outputs for the graph (currently 1 - flap or not)
         self.numNodes = 100                 # Set the number of nodes for each genotype
         self.nodes = []                     # Initialize empty list to hold all the node objects
-        self.fitness = 0                    # Initialize fitness value of the genotype to 0
+        self.fitness = 0                    # Initialize totalFitness value of the genotype to 0
         self.levelsBack = self.numNodes     # Set levels back equivalent to the total number of nodes
         self.activeNodesDetermined = False  # Tells whether the active nodes have been found
         self.createNodes()                  # Call function to create all the nodes and link them
@@ -100,7 +100,7 @@ class Genotype:
 
     # Provided args are the values to go into the evaluation - in this case, v, h, and g
     def calculateOutput(self, *args):
-        # Check active nodes - has to be done after every mutation, but can be skipped for parent birds
+        # Check active nodes - has to be done after every mutation, but can be skipped for parent planes
         if not self.activeNodesDetermined:
             self.determineActiveNodes()
             self.activeNodesDetermined = True
@@ -162,8 +162,8 @@ class Genotype:
 
 def evolvePop(pop, numChildren, numParents, mutRate):
 
-    # Sort population to find the ones with highest fitness
-    pop = sorted(pop, key=lambda genotype: genotype.fitness)
+    # Sort population to find the ones with highest totalFitness
+    pop = sorted(pop, key=lambda genotype: genotype.totalFitness)
 
     # Slice off the fittest numParents to be parents of the next generation
     parents = pop[-numParents:]

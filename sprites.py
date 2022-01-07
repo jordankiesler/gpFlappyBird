@@ -1,5 +1,5 @@
 """
-Sprites used in the game: the bird and the pipe.
+Sprites used in the game: the plane and the pipe.
 """
 import enum
 import math
@@ -7,7 +7,7 @@ import math
 import pygame as pg
 
 from settings import *
-from os import path
+import settings
 
 
 class MovableSprite(pg.sprite.Sprite):
@@ -19,91 +19,103 @@ class MovableSprite(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    def moveby(self, dx=0, dy=0):
+    def moveBy(self, dx=0, dy=0):
         self.rect.move_ip(dx, dy)
 
 
-class Bird(MovableSprite):
+class Plane(MovableSprite):
     def __init__(self, game, image: pg.Surface, x, y):
         self._layer = 3  # required for pygame.sprite.LayeredUpdates: set before adding it to the group!
-        super().__init__(game.all_sprites, game.birds)
-        self._game = game
+        super().__init__(game.allSprites, game.planes)
+        self.game = game
         self.image = image
-        self.origin_image = self.image
+        self.originImage = self.image
         self.rect = image.get_rect(x=x, y=y)
-        self._vel_y = 0
-        self.score = 0
+        self.yVelocity = 0
+        self.distanceScore = 0
+        self.targetScore = 0
+        self.totalScore = self.distanceScore + (50 * self.targetScore)
         self.angle = 0
 
     def update(self, *args):
-        # check whether the bird flies outside the boundary
+        # check whether the plane flies outside the boundary
         # whether it hits a pipe
         if self.rect.top > SCREEN_HEIGHT or self.rect.bottom < 0:
             self.kill()
             return
-        if pg.sprite.spritecollideany(self, self._game.pipes):
+        if pg.sprite.spritecollideany(self, self.game.radars):
+            if self.distanceScore > 1000:
+                settings.MU_WEIGHTS = [10, 20, 30, 55, 80, 90, 100]
             self.kill()
             return
-        self._vel_y = min(self._vel_y + GRAVITY_ACC, BIRD_MAX_Y_SPEED)
-        self.rect.y += self._vel_y
-        # rotate the bird according to how it is moving: [-4, 4] -> 40 degree
-        # TODO: ANGLES!
-        angle = 40 - (self._vel_y + 4) / 8 * 80
+        if self.distanceScore > 5000:
+            settings.MU = [2, 1, 1]
+            settings.MU_WEIGHTS = [10, 20, 90, 100]
+            self.kill()
+            return
+        self.yVelocity = min(self.yVelocity + GRAVITY_ACC, PLANE_MAX_Y_SPEED)
+        self.rect.y += self.yVelocity
+        # rotate the plane according to how it is moving: [-4, 4] -> 40 degree
+        angle = 40 - (self.yVelocity + 4) / 8 * 80
         self.angle = min(30, max(angle, -30))
-        self.image = pg.transform.rotate(self.origin_image, self.angle)
+        self.image = pg.transform.rotate(self.originImage, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
+        self.totalScore = self.distanceScore + (10 * self.targetScore)
+        # self.totalScore = self.distanceScore + max(0, 50 * self.targetScore)
 
-    def flap(self):
-        self._vel_y = JUMP_SPEED
+    def turnLeft(self):
+        self.yVelocity = JUMP_SPEED
 
-    def flapLeft(self):
-        self._vel_y = JUMP_SPEED
+    def turnRight(self):
+        self.yVelocity = -JUMP_SPEED
 
-    def flapRight(self):
-        self._vel_y = -JUMP_SPEED
+    def goStraight(self):
+        self.yVelocity = 0
 
     def shoot(self):
-        Bullet(self._game, self._game._bullet_image, self.rect.x, self.rect.y, self.angle, self)
+        Bullet(self.game, self.game.bulletImage, self.rect.x, self.rect.y, self.angle, self)
 
     @property
     def vel_y(self):
-        return self._vel_y
+        return self.yVelocity
 
 
-class AIBird(Bird):
+class AIPlane(Plane):
     def __init__(self, game, image: pg.Surface, x, y, brain):
         super().__init__(game, image, x, y)
         self.brain = brain
 
     def kill(self):
         super().kill()
-        self.brain.fitness = self.score
+        self.brain.totalFitness = self.totalScore
+        self.brain.distanceFitness = self.distanceScore
+        self.brain.targetFitness = self.targetScore
 
     def eval(self, v, h, g, vr, hr):
         # Now has two outputs
         return self.brain.eval(v, h, g, vr, hr)
 
 
-class PipeType(enum.Enum):
+class RadarType(enum.Enum):
     TOP = 0
     BOTTOM = 1
 
 
-class Pipe(MovableSprite):
+class Radar(MovableSprite):
     def __init__(self, game, image, centerx, length, type_):
-        self._layer = 1
-        super().__init__(game.all_sprites, game.pipes)
+        self._layer = 2
+        super().__init__(game.allSprites, game.radars)
         self._game = game
         self.type = type_
         # crop the image to the specified length
         self.image = pg.Surface((image.get_width(), length))
-        if type_ == PipeType.TOP:
+        if type_ == RadarType.TOP:
             self.image.blit(image, (0, 0), (0, image.get_height() - length, image.get_width(), length))
         else:
             self.image.blit(image, (0, 0), (0, 0, image.get_width(), length))
         # position and region
         self.rect = self.image.get_rect(centerx=centerx)
-        if type_ == PipeType.TOP:
+        if type_ == RadarType.TOP:
             self.rect.top = 0
         else:
             self.rect.bottom = SCREEN_HEIGHT
@@ -111,11 +123,11 @@ class Pipe(MovableSprite):
         self.length = length
 
 
-class Rock(MovableSprite):
+class Target(MovableSprite):
 
     def __init__(self, game, image: pg.Surface, x, y):
-        self._layer = 2
-        super().__init__(game.all_sprites, game.rocks)
+        self._layer = 1
+        super().__init__(game.allSprites, game.targets)
         self._game = game
         self.image = image
         self.rect = image.get_rect(x=x, y=y)
@@ -123,21 +135,22 @@ class Rock(MovableSprite):
     def kill(self):
         super().kill()
 
+
 # TODO: ANGLES!
 class Bullet(MovableSprite):
 
-    def __init__(self, game, image: pg.Surface, x, y, angle, bird):
+    def __init__(self, game, image: pg.Surface, x, y, angle, plane):
         self._layer = 1
-        super().__init__(game.all_sprites, game.bullets)
+        super().__init__(game.allSprites, game.bullets)
         self._game = game
         self.image = image
         self.origin_image = self.image
         self.rect = self.image.get_rect(x=x, y=y)
         self.angle = angle
-        self.bird = bird
-        # self.image = pg.transform.rotate(self.origin_image, self.angle)
+        self.plane = plane
+        # self.image = pg.transform.rotate(self.originImage, self.angle)
 
-    def moveby(self, dx=0, dy=0):
+    def moveBy(self, dx=0, dy=0):
         self.rect.move_ip(dx, dx * math.tan(math.degrees(self.angle)))
 
 
@@ -147,7 +160,7 @@ class Background(pg.sprite.Sprite):
     """
     def __init__(self, game, image):
         self._layer = 0
-        super().__init__(game.all_sprites)
+        super().__init__(game.allSprites)
         # if the width of the given image < screen width, then repeat it until we get a wide enough one
         if image.get_width() < SCREEN_WIDTH:
             w = image.get_width()

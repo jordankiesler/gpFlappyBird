@@ -8,34 +8,100 @@ Reference
 2. [Binary expression tree](https://en.wikipedia.org/wiki/Binary_expression_tree). Note that the operators are not required
 to be binary though.
 """
-import cgp
 import sympy as sp
 import operator
 import math
 from typing import Dict, Sequence
 import networkx as nx
+import matplotlib.pyplot as plt
+import numpy as np
+
+import cgp
 from settings import *
 
 
 # Map Python functions to sympy counterparts for symbolic simplification.
 DEFAULT_SYMBOLIC_FUNCTION_MAP = {
-    operator.and_.__name__: sp.And,
-    operator.or_.__name__: sp.Or,
-    operator.not_.__name__: sp.Not,
     operator.add.__name__: operator.add,
     operator.sub.__name__: operator.sub,
     operator.mul.__name__: operator.mul,
     operator.neg.__name__: operator.neg,
-    operator.pow.__name__: operator.pow,
-    operator.abs.__name__: operator.abs,
-    operator.floordiv.__name__: operator.floordiv,
-    operator.truediv.__name__: operator.truediv,
-    'protected_div': operator.truediv,
-    math.log.__name__: sp.log,
-    math.sin.__name__: sp.sin,
-    math.cos.__name__: sp.cos,
-    math.tan.__name__: sp.tan
+    'div': operator.truediv,
 }
+
+
+def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTargetScoreSoFar, maxTotalScore,
+                   maxDistanceScore, maxTargetScore, maxTotalList, maxTotalSoFarList, maxDistanceList,
+                   maxDistanceSoFarList, maxTargetList, maxTargetSoFarList):
+
+    content = open('./pp/numRuns.txt', 'r').readlines()
+    runNum = int(content[0])
+    content[0] = str(runNum + 1)
+    out = open('./pp/numRuns.txt', 'w')
+    out.writelines(content)
+    out.close()
+
+    # Open the file in append & read mode ('a+')
+    with open("./pp/trainingData.txt", "a+") as file:
+        # Get what run number it is
+
+        text = f"--RUN {runNum}--\n" \
+               f"Generations: {generation}\n" \
+               f"Maximum Total Score: {maxTotalScoreSoFar} \n" \
+               f"Maximum Distance Score: {maxDistanceScoreSoFar} \n" \
+               f"Maximum Target Score: {maxTargetScoreSoFar} \n" \
+               f"Final Iteration Last Surviving Total Score: {maxTotalScore} \n" \
+               f"Final Iteration Last Surviving Distance Score: {maxDistanceScore} \n" \
+               f"Final Iteration Last Surviving Target Score: {maxTargetScore} \n" \
+               f"Random Seed: {RANDOM_SEED} \n" \
+               f"Mu: {MU}   Lambda: {LAMBDA} \n" \
+               f"Population Size: {sum(MU) + LAMBDA}\n" \
+               f"List of Best in Generation for Total Score: {maxTotalList} \n" \
+               f"List of Best in All Previous Generations for Total Score: {maxTotalSoFarList} \n" \
+               f"List of Best in Generation for Distance Score: {maxDistanceList} \n" \
+               f"List of Best in All Previous Generations for Distance Score: {maxDistanceSoFarList} \n" \
+               f"List of Best in Generation for Target Score: {maxTargetList} \n" \
+               f"List of Best in All Previous Generations for Target Score: {maxTargetSoFarList} \n"
+
+            # Move read cursor to the start of file.
+        file.seek(0)
+        # If file is not empty then append '\n'
+        data = file.read(100)
+        if len(data) > 0:
+            file.write("\n\n")
+        # Append text at the end of file
+        file.write(text)
+
+
+def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList,
+             maxTargetList, maxTargetSoFarList):
+
+    generationNum = np.arange(0, generation, 1)
+
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Total Score')
+    axs[0].scatter(generationNum, maxTotalList, s=5)
+    axs[1].plot(generationNum, maxTotalSoFarList)
+    axs[0].set_ylabel("Generational Winner")
+    axs[1].set_ylabel("Max Pop Fitness")
+    axs[1].set_xlabel("Generation Number")
+
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Distance Score')
+    axs[0].scatter(generationNum, maxDistanceList, s=5)
+    axs[1].plot(generationNum, maxDistanceSoFarList)
+    axs[0].set_ylabel("Generational Winner")
+    axs[1].set_ylabel("Max Pop Fitness")
+    axs[1].set_xlabel("Generation Number")
+
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Target Score')
+    axs[0].scatter(generationNum, maxTargetList, s=5)
+    axs[1].plot(generationNum, maxTargetSoFarList)
+    axs[0].set_ylabel("Generational Winner")
+    axs[1].set_ylabel("Max Pop Fitness")
+    axs[1].set_xlabel("Generation Number")
+    plt.show()
 
 
 def extract_computational_subgraph(ind: cgp.Individual) -> nx.MultiDiGraph:
@@ -51,22 +117,23 @@ def extract_computational_subgraph(ind: cgp.Individual) -> nx.MultiDiGraph:
     http://www.cs.columbia.edu/~mcollins/ff2.pdf for knowledge of computational graphs.
     """
     # make sure that active nodes have been confirmed
-    if not ind._active_determined:
-        ind._determine_active_nodes()
-        ind._active_determined = True
+    if not ind.activeNodesDetermined:
+        ind.determineActiveNodes()
+        ind.activeNodesDetermined = True
     # in the digraph, each node is identified by its index in `ind.nodes`
     # if node i depends on node j, then there is an edge j->i
     g = nx.MultiDiGraph()  # possibly duplicated edges
     for i, node in enumerate(ind.nodes):
         if node.active:
-            f = ind.function_set[node.i_func]
+            f = ind.functionTable[node.functionIndex]
             g.add_node(i, func=f.name)
             order = 1
             for j in range(f.arity):
-                i_input = node.i_inputs[j]
-                w = node.weights[j]
+                i_input = node.inputIndices[j]
+                w = node.inputWeights[j]
                 g.add_edge(i_input, i, weight=w, order=order)
                 order += 1
+
     return g
 
 
@@ -118,43 +185,3 @@ def round_expr(expr, num_digits):
     # https://stackoverflow.com/questions/48491577/printing-the-output-rounded-to-3-decimals-in-sympy
     return expr.xreplace({n: round(n, num_digits) for n in expr.atoms(sp.Number)})
 
-
-def visualize(g: nx.MultiDiGraph, to_file: str, input_names: Sequence = None, operator_map: Dict = None):
-    """Visualize an acyclic graph `g`.
-
-    Args:
-        g (nx.MultiDiGraph): a graph
-        to_file (str): file path
-        input_names (Sequence, optional): a list of names, each for one input. If `None`, then a default name "vi" is used
-            for the i-th input. Defaults to None.
-        operator_map (Dict, optional): Denote a function by an operator symbol for conciseness. Defaults to None. If `None`,
-            then +-*/ are used.
-    """
-
-    from networkx.drawing.nx_agraph import to_agraph
-    import pygraphviz
-    layout = 'dot'
-    # label each function node with an operator
-    if operator_map is None:
-        operator_map = {operator.add.__name__: '+',
-                        operator.sub.__name__: '-',
-                        operator.neg.__name__: '-',
-                        operator.mul.__name__: '*',
-                        "protected_div": '/'}
-    for n in g.nodes:
-        attr = g.nodes[n]
-        if n >= 0:  # function node
-            if attr['func'] not in operator_map:
-                print(
-                    f"Operator notation of '{attr['func']}'' is not available. The node id is shown instead.")
-            attr['label'] = operator_map.get(attr['func'], n)
-            if g.out_degree(n) == 0:  # the unique output node
-                attr['color'] = 'red'
-        else:  # input node
-            attr['color'] = 'green'
-            attr['label'] = input_names[-n -
-                                        1] if input_names is not None else f'v{-n}'
-
-    ag: pygraphviz.agraph.AGraph = to_agraph(g)
-    ag.layout(layout)
-    ag.draw(to_file)

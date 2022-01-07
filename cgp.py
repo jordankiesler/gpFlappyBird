@@ -1,6 +1,7 @@
 import copy
 import operator as op
 import random
+import math
 
 
 class Function:
@@ -8,7 +9,7 @@ class Function:
     def __init__(self, action, arity):
         self.action = action
         self.arity = arity
-        # self.name = action.__name__
+        self.name = action.__name__
 
     # Used to allow the class to be called like a function (i.e., call the add operator and give it the required inputs)
     def __call__(self, *args, **kwargs):
@@ -41,21 +42,22 @@ class Node:
 
 class Individual:
     """
-    A single genotype - takes 3 inputs, has a bunch of nodes connected up, then gives an output
+    A single genotype - takes 5 inputs, has a bunch of nodes connected up, then gives an output
     """
-
     def __init__(self):
-        self.functionTable = functionTable  # Table of functions that can be set for each node
-        self.weightMin = -1  # Min weight for each input
-        self.weightMax = 1  # Max weight for each input
-        self.numInputs = 5  # Set the number of inputs - currently 3 - v, g, and h (+2 for the rock)
-        self.numOutputs = 2  # Set the number of outputs for the graph (currently 1 - flap or not)
-        self.numNodes = 100  # Set the number of nodes for each genotype
-        self.nodes = []  # Initialize empty list to hold all the node objects
-        self.fitness = 0  # Initialize fitness value of the genotype to 0
-        self.levelsBack = self.numNodes  # Set levels back equivalent to the total number of nodes
-        self.activeNodesDetermined = False  # Tells whether the active nodes have been found
-        self.createNodes()  # Call function to create all the nodes and link them
+        self.functionTable = functionTable      # Table of functions that can be set for each node
+        self.weightMin = -1                     # Min weight for each input
+        self.weightMax = 1                      # Max weight for each input
+        self.numInputs = 5                      # Set the number of inputs - currently 5 - v, g, h, vr, and hr
+        self.numOutputs = 2                     # Set the number of outputs for the graph
+        self.numNodes = 250                     # Set the number of nodes for each genotype
+        self.nodes = []                         # Initialize empty list to hold all the node objects
+        self.totalFitness = 0                   # Initialize totalFitness value of the genotype to 0
+        self.distanceFitness = 0                # Initialize distanceFitness value of the genotype to 0
+        self.targetFitness = 0                  # Initialize targetFitness value of the genotype to 0
+        self.levelsBack = self.numNodes         # Set levels back equivalent to the total number of nodes
+        self.activeNodesDetermined = False      # Tells whether the active nodes have been found
+        self.createNodes()                      # Call function to create all the nodes and link them
 
     def createNodes(self):
         # Create and connect each node
@@ -94,7 +96,7 @@ class Individual:
 
     # Provided args are the values to go into the evaluation - in this case, v, h, and g
     def eval(self, *args):
-        # Check active nodes - has to be done after every mutation, but can be skipped for parent birds
+        # Check active nodes - has to be done after every mutation, but can be skipped for parent planes
         if not self.activeNodesDetermined:
             self.determineActiveNodes()
             self.activeNodesDetermined = True
@@ -117,7 +119,6 @@ class Individual:
                 node.output = self.functionTable[node.functionIndex](*inputs)
 
         # Return the final output value
-        # TODO: This will have to be updated if there are multiple output values
         return self.nodes[-1].output, self.nodes[-2].output
 
     def mutate(self, mutRate):
@@ -159,24 +160,29 @@ class Individual:
             child.nodes[-x].active = True
 
         # Reset default values
-        child.fitness = 0
+        child.totalFitness = 0
         child.activeNodesDetermined = False
 
         return child
 
 
-def evolve(pop, mutRate, numParents, numChildren):
-    # Sort population to find the ones with highest fitness
-    pop = sorted(pop, key=lambda genotype: genotype.fitness)
+def evolve(pop, mutRate, numParents, numChildren, parentWeights):
+    # Sort population to find the ones with highest fitness for all categories
+    pop0 = sorted(pop, key=lambda genotype: genotype.totalFitness)
+    pop1 = sorted(pop, key=lambda genotype: genotype.distanceFitness)
+    pop2 = sorted(pop, key=lambda genotype: genotype.targetFitness)
 
-    # Slice off the fittest numParents to be parents of the next generation
-    parents = pop[-numParents:]
+    # Slice off the fittest numParents for each category to be parents of the next generation
+    parents = pop0[-numParents[0]:] + pop1[-numParents[1]:] + pop2[-numParents[2]:]
+
+    # Weigh the likelihood of which parents get chosen - i.e., parents with good distance can get chosen more often
+    weightedParents = random.choices(parents, cum_weights=parentWeights)
 
     # Initialize an empty list to hold the kiddos
     children = []
     # Pick a parent at random and add their mutated genotype to the list of lil kids
     for _ in range(numChildren):
-        parent = random.choice(parents)
+        parent = random.choice(weightedParents)
         children.append(parent.mutate(mutRate))
 
     return parents + children
