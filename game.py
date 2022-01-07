@@ -39,6 +39,7 @@ class Game:
         self.playing = False
         self.frontRadar = None                      # the radar in the most front
         self.frontTarget = None                     # the target in the most front
+        self.numTargets = 0
 
         # CGP settings
         self.numPlanes = sum(MU) + LAMBDA
@@ -69,6 +70,7 @@ class Game:
         if VERBOSE:
             print(f'------Generation: {self.currentGeneration}. Max total score so far: {self.maxTotalScoreSoFar}-----')
 
+        # Collect relevant final values for the lists
         self.bestPlaneScoresList.append(self.bestPlaneScores)
         self.maxTotalList.append(self.maxTotalScore)
         self.maxTotalSoFarList.append(self.maxTotalScoreSoFar)
@@ -77,9 +79,11 @@ class Game:
         self.maxTargetList.append(self.maxTargetScore)
         self.maxTargetSoFarList.append(self.maxTargetScoreSoFar)
 
+        # Reset relevant values
         self.maxTotalScore = 0
         self.maxDistanceScore = 0
         self.maxTargetScore = 0
+        self.numTargets = 0
         self.bestPlaneScores = []
         self.currentGeneration += 1
         # empty all the current sprites if any
@@ -199,9 +203,9 @@ class Game:
                     elif event.key == pg.K_1:  # ctrl + 1 (2, 3): standard frame rate
                         self._fps = FPS
                     elif event.key == pg.K_2:
-                        self._fps = 10 * FPS
+                        self._fps = 2 * FPS
                     elif event.key == pg.K_3:
-                        self._fps = 20 * FPS
+                        self._fps = 3 * FPS
 
         for plane in self.planes:
             self.tryAction(plane)
@@ -216,12 +220,15 @@ class Game:
 
     def getFrontTarget(self, plane):
         """
-        Get the most front rock before the plane
+        Get the most front target before the plane
         """
+        # Sometimes the next target spawned too far outside the window (feature kept to prevent too even of target
+        # spacing), so if this happens, another target is spawned instead and fed to the machine
         try:
             frontTarget = min((r for r in self.targets if r.rect.right >= plane.rect.left), key=lambda r: r.rect.x)
             return frontTarget
         except ValueError:
+            self.numTargets += 1
             return Target(self, self.targetImage, random.randint(SCREEN_WIDTH, SCREEN_WIDTH * 1.2), random.randint(100, 400))
 
     def tryAction(self, plane):
@@ -285,14 +292,14 @@ class Game:
 
         for bullet in self.bullets:
             if pg.sprite.spritecollide(bullet, self.targets, dokill=True):
-                bullet.plane.targetScore += 1
+                bullet.plane.targetScore += 4
 
         # Sorts planes to find one with highest total score, and sets appropriate values (repeat for dist and targets)
         sortedPlanes = sorted(self.planes, key=lambda plane: plane.totalScore)
         # Stores score value for all 3 categories for plane with best overall performance in a generation
         self.bestPlaneScores = max(self.bestPlaneScores, [sortedPlanes[-1].totalScore, sortedPlanes[-1].distanceScore,
                                                           sortedPlanes[-1].targetScore])
-        self.maxTotalScore = sortedPlanes[-1].totalScore
+        self.maxTotalScore = max(self.maxTotalScore, sortedPlanes[-1].totalScore)
         self.maxTotalScoreSoFar = max(self.maxTotalScoreSoFar, self.maxTotalScore)
 
         sortedPlanes2 = sorted(self.planes, key=lambda plane: plane.distanceScore)
@@ -300,27 +307,30 @@ class Game:
         self.maxDistanceScoreSoFar = max(self.maxDistanceScoreSoFar, self.maxDistanceScore)
 
         sortedPlanes3 = sorted(self.planes, key=lambda plane: plane.targetScore)
-        self.maxTargetScore = sortedPlanes3[-1].targetScore
+        self.maxTargetScore = max(self.maxTargetScore, sortedPlanes3[-1].targetScore)
         self.maxTargetScoreSoFar = max(self.maxTargetScoreSoFar, self.maxTargetScore)
 
         # spawn a new pipe if necessary
         while self.frontRadar.rect.x < SCREEN_WIDTH:
             self.spawnRadar()
             Target(self, self.targetImage, random.randint(SCREEN_WIDTH, SCREEN_WIDTH * 1.2), random.randint(100, 400))
+            self.numTargets += 1
 
     def draw(self):
         self.allSprites.draw(self._screen)
         # show distanceScore
         self.drawText('Distance Score: {}'.format(self.maxDistanceScore), 10, 10)
-        self.drawText('Target Score: {}'.format(self.maxTargetScore), 10, 10 + FONT_SIZE + 2)
-        self.drawText('Total Score: {}'.format(self.maxTotalScore), 10, 10 + 2 * (FONT_SIZE + 2))
-        self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10, 10 + 3 * (FONT_SIZE + 2))
-        self.drawText('Generation: {}'.format(self.currentGeneration), 10, 10 + 4 * (FONT_SIZE + 2))
+        self.drawText('Target Score: {}'.format(self.maxTargetScore), 10 + FONT_SIZE + 2, 10)
+        self.drawText('Total Score: {}'.format(self.maxTotalScore), 10 + 2 * (FONT_SIZE + 2), 10)
+        self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10 + 3 * (FONT_SIZE + 2), 10)
+        self.drawText('Generation: {}'.format(self.currentGeneration), 10 + 4 * (FONT_SIZE + 2), 10)
         numAlive = len(self.planes)
-        self.drawText('Alive: {} / {}'.format(numAlive, self.numPlanes), 10, 10 + 5 * (FONT_SIZE + 2))
+        self.drawText('Alive: {} / {}'.format(numAlive, self.numPlanes), 10 + 5 * (FONT_SIZE + 2), 10)
+        self._screen.blit(pg.transform.rotate(self._screen, 90), (0, 0))
+        pg.display.flip()
         pg.display.update()
 
     def drawText(self, text, x, y, color=WHITE, font=FONT_NAME, size=FONT_SIZE):
         font = pg.font.SysFont(font, size)
         text_surface = font.render(text, True, color)
-        self._screen.blit(text_surface, (x, y))
+        self._screen.blit(pg.transform.rotate(text_surface, -90), (x, y))

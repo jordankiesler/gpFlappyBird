@@ -19,7 +19,7 @@ class MovableSprite(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    def moveBy(self, dx=0, dy=0):
+    def moveBy(self, dy=0, dx=0):
         self.rect.move_ip(dx, dy)
 
 

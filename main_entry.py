@@ -21,7 +21,7 @@ def main():
         writeRunToFile(game.currentGeneration, game.maxTotalScoreSoFar, game.maxDistanceScoreSoFar,
                        game.maxTargetScoreSoFar, game.maxTotalList, game.maxTotalSoFarList,
                        game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList,
-                       game.bestPlaneScoresList)
+                       game.bestPlaneScoresList, game.numTargets)
 
     if PP_FORMULA or PP_GRAPH_VISUALIZATION:
         gs = [extract_computational_subgraph(ind) for ind in game.pop]

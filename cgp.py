@@ -176,8 +176,18 @@ def evolve(pop, mutRate, numParents, numChildren, parentWeights):
     # Slice off the fittest numParents for each category to be parents of the next generation
     parents = pop0[-numParents[0]:] + pop1[-numParents[1]:] + pop2[-numParents[2]:]
 
+    # If multiple individuals are the same (i.e. the same individual had highest total score and highest fitness), then
+    # discard the repeats and choose the next fittest  distance wise (didn't use a set b/c wanted to keep order)
+    parentSet = list(dict.fromkeys(parents))
+    sumParents = sum(numParents)
+    newParent = numParents[1]
+    while len(parentSet) < sumParents:
+        newParent += 1
+        parentSet.append(pop1[-newParent])
+        parentSet = list(dict.fromkeys(parentSet))
+
     # Weigh the likelihood of which parents get chosen - i.e., parents with good distance can get chosen more often
-    weightedParents = random.choices(parents, cum_weights=parentWeights)
+    weightedParents = random.choices(parentSet, cum_weights=parentWeights)
 
     # Initialize an empty list to hold the kiddos
     children = []

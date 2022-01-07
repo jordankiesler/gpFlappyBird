@@ -32,7 +32,7 @@ DEFAULT_SYMBOLIC_FUNCTION_MAP = {
 
 def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTargetScoreSoFar,
                    maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList, maxTargetList,
-                   maxTargetSoFarList, bestPlaneScoresList):
+                   maxTargetSoFarList, bestPlaneScoresList, numTargets):
 
     content = open('./pp/numRuns.txt', 'r').readlines()
     runNum = int(content[0])
@@ -55,6 +55,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
                f"Best Overall Total Score: {sortedPlanes[-1][0]} \n" \
                f"Distance Score of Best Overall: {sortedPlanes[-1][1]} \n" \
                f"Target Score of Best Overall: {sortedPlanes[-1][2]} \n" \
+               f"Theoretical Maximum Score: {PLANE_MAX_DISTANCE_ALLOWED + (WEIGHT_TARGETS * (numTargets*2))}" \
                f"\nPARAMETERS:\n" \
                f"Random Seed: {RANDOM_SEED} \n" \
                f"Mu: {MU}   Mu Weights: {MU_WEIGHTS}    Lambda: {LAMBDA} \n" \

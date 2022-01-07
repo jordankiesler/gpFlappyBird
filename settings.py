@@ -3,10 +3,10 @@ Define some constant parameters and program settings.
 """
 import random
 
-SCREEN_WIDTH = 600
+SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
 TITLE = 'Basic AI Drone via Evolutionary Cartesian Genetic Programming'
-FPS = 600
+FPS = 500
 IMG_DIR = './img'
 FONT_NAME = 'Arial'
 FONT_SIZE = 20
@@ -15,7 +15,7 @@ WHITE = (255, 255, 255)
 PLANE_Y_SPEED = -3.5        # once the plane turns, its vertical speed becomes this value
 PLANE_X_SPEED = 3           # the const horizontal speed of the plane
 
-PLANE_MAX_DISTANCE_ALLOWED = 7500   # max distance plane allowed to fly before resetting
+PLANE_MAX_DISTANCE_ALLOWED = 5000   # max distance plane allowed to fly before resetting
 WEIGHT_TARGETS = 10                 # how heavily target points are weighted against distance pts
 
 
@@ -34,7 +34,7 @@ RANDOM_SEED = random.randint(1, 100000)     # Allows reproducibility
 MU = [3, 2, 2]             # List for Mu is number of parents kept for total, distance, and target fitness, respectively
 MU_WEIGHTS = [15, 30, 44, 58, 72, 86, 100]  # List of weights for probability of choosing each parent - begins evenly
 LAMBDA = 23                                 # Number of children
-N_GEN = 50                                  # max number of generations
+N_GEN = 100                                  # max number of generations
 
 VERBOSE = True              # if True, then additional information will be printed
 
@@ -46,5 +46,4 @@ PP_FORMULA_NUM_DIGITS = 5
 PP_FORMULA_SIMPLIFICATION = True
 PP_GRAPH_VISUALIZATION = False
 PP_WRITE_TO_TEXT = True
-PP_PLOT_DATA =True
-
+PP_PLOT_DATA = False
