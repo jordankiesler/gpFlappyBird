@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import cgp
-from settings import *
+import settings as st
 
 
 # Map Python functions to sympy counterparts for symbolic simplification.
@@ -48,6 +48,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
         # Get what run number it is
 
         text = f"--RUN {runNum}--\n" \
+               f"Population Size: {sum(st.MU) + st.LAMBDA}\n" \
                f"Generations: {generation}\n" \
                f"Maximum Total Score: {maxTotalScoreSoFar} \n" \
                f"Maximum Distance Score: {maxDistanceScoreSoFar} \n" \
@@ -55,20 +56,8 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
                f"Best Overall Total Score: {sortedPlanes[-1][0]} \n" \
                f"Distance Score of Best Overall: {sortedPlanes[-1][1]} \n" \
                f"Target Score of Best Overall: {sortedPlanes[-1][2]} \n" \
-               f"Theoretical Maximum Score: {PLANE_MAX_DISTANCE_ALLOWED + (WEIGHT_TARGETS * (numTargets*2))}" \
-               f"\nPARAMETERS:\n" \
-               f"Random Seed: {RANDOM_SEED} \n" \
-               f"Mu: {MU}   Mu Weights: {MU_WEIGHTS}    Lambda: {LAMBDA} \n" \
-               f"Population Size: {sum(MU) + LAMBDA}\n" \
-               f"Maximum Allowed Distance: {PLANE_MAX_DISTANCE_ALLOWED} \n" \
-               f"Plane Y Speed: {PLANE_Y_SPEED}     Plane X Speed: {PLANE_X_SPEED}\n" \
-               f"Multi-Objective Weight Function: distanceScore + ({WEIGHT_TARGETS} * targetScore)\n" \
-               f"Range of Horizontal Space between Adjacent Radar Pairs: {MIN_RADAR_SPACE} - {MAX_RADAR_SPACE}\n" \
-               f"Range of Gap (Vertical Space) between Pair of Radars:  {MIN_RADAR_GAP} - {MAX_RADAR_GAP}\n" \
-               f"Minimum Length of Radar Beam: {MIN_RADAR_LENGTH}\n" \
-               f"Mutation Probability (Weighted for low maximum total scores): {MUT_PB}\n" \
-               f"Number of Columns: {N_COLS}\n" \
-               f"Number of Levels Back: {LEVEL_BACK}\n" \
+               f"Number of Columns: {st.N_COLS}\n" \
+               f"Number of Levels Back: {st.LEVEL_BACK}\n" \
                f"\nLISTS:\n" \
                f"List of Best in Generation for Total Score: {maxTotalList} \n" \
                f"List of Best in All Previous Generations for Total Score: {maxTotalSoFarList} \n" \
@@ -191,7 +180,7 @@ def simplify(g: nx.MultiDiGraph, input_names: Sequence = None, symbolic_function
             func = g.nodes[node_id]["func"]
             sym_func = symbolic_function_map[func]
             r = sym_func(*args)
-            d[node_id] = sp.simplify(r) if PP_FORMULA_SIMPLIFICATION else r
+            d[node_id] = sp.simplify(r) if st.PP_FORMULA_SIMPLIFICATION else r
     # the unique output is the last node
     return d[ts[-1]]
 
@@ -200,3 +189,15 @@ def round_expr(expr, num_digits):
     # https://stackoverflow.com/questions/48491577/printing-the-output-rounded-to-3-decimals-in-sympy
     return expr.xreplace({n: round(n, num_digits) for n in expr.atoms(sp.Number)})
 
+# f"Theoretical Maximum Score: {PLANE_MAX_DISTANCE_ALLOWED + (WEIGHT_TARGETS * (numTargets*2))}\n" \
+# f"\nPARAMETERS:\n" \
+# f"Random Seed: {RANDOM_SEED} \n" \
+# f"Mu: {MU}   Mu Weights: {MU_WEIGHTS}    Lambda: {LAMBDA} \n" \
+# f"Population Size: {sum(MU) + LAMBDA}\n" \
+# f"Maximum Allowed Distance: {PLANE_MAX_DISTANCE_ALLOWED} \n" \
+# f"Plane Y Speed: {PLANE_Y_SPEED}     Plane X Speed: {PLANE_X_SPEED}\n" \
+# f"Multi-Objective Weight Function: distanceScore + ({WEIGHT_TARGETS} * targetScore)\n" \
+# f"Range of Horizontal Space between Adjacent Radar Pairs: {MIN_RADAR_SPACE} - {MAX_RADAR_SPACE}\n" \
+# f"Range of Gap (Vertical Space) between Pair of Radars:  {MIN_RADAR_GAP} - {MAX_RADAR_GAP}\n" \
+# f"Minimum Length of Radar Beam: {MIN_RADAR_LENGTH}\n" \
+# f"Mutation Probability (Weighted for low maximum total scores): {MUT_PB}\n" \

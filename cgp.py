@@ -187,7 +187,10 @@ def evolve(pop, mutRate, numParents, numChildren, parentWeights):
         parentSet = list(dict.fromkeys(parentSet))
 
     # Weigh the likelihood of which parents get chosen - i.e., parents with good distance can get chosen more often
-    weightedParents = random.choices(parentSet, cum_weights=parentWeights)
+    if parentWeights is None:
+        weightedParents = random.choices(parentSet)
+    else:
+        weightedParents = random.choices(parentSet, cum_weights=parentWeights)
 
     # Initialize an empty list to hold the kiddos
     children = []

@@ -36,7 +36,7 @@ MU_WEIGHTS = [15, 30, 44, 58, 72, 86, 100]  # List of weights for probability of
 LAMBDA = 23                                 # Number of children
 N_GEN = 100                                  # max number of generations
 
-VERBOSE = True              # if True, then additional information will be printed
+VERBOSE = False              # if True, then additional information will be printed
 
 # Postprocessing
 # if True, then the evolved math formula will be simplified and the corresponding

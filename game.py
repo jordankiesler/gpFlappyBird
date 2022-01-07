@@ -8,6 +8,7 @@ import os
 
 import cgp
 from sprites import *
+import settings as st
 
 
 class Game:
@@ -16,11 +17,11 @@ class Game:
         pg.mixer.pre_init()
         pg.mixer.init()
         pg.init()
-        self._screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pg.display.set_caption(TITLE)
+        self._screen = pg.display.set_mode((st.SCREEN_WIDTH, st.SCREEN_HEIGHT))
+        pg.display.set_caption(st.TITLE)
         self._clock = pg.time.Clock()
         self._is_paused = False
-        self._fps = FPS
+        self._fps = st.FPS
 
         self.planeImage = None
         self.radarImages = None
@@ -42,7 +43,7 @@ class Game:
         self.numTargets = 0
 
         # CGP settings
-        self.numPlanes = sum(MU) + LAMBDA
+        self.numPlanes = sum(st.MU) + st.LAMBDA
         self.maxTotalScoreSoFar = 0                 # max distanceScore so far in all the rounds since the game started
         self.maxDistanceScoreSoFar = 0              # max distance score in all the rounds since the game started
         self.maxTargetScoreSoFar = 0                # max target distanceScore in all the rounds since the game started
@@ -67,7 +68,7 @@ class Game:
         self.currentGeneration = 0
 
     def reset(self):
-        if VERBOSE:
+        if st.VERBOSE:
             print(f'------Generation: {self.currentGeneration}. Max total score so far: {self.maxTotalScoreSoFar}-----')
 
         # Collect relevant final values for the lists
@@ -91,12 +92,12 @@ class Game:
             s.kill()
         # instantiate planes
         x = 50
-        y = SCREEN_HEIGHT / 3
+        y = st.SCREEN_HEIGHT / 3
         for i in range(self.numPlanes):
             AIPlane(self, self.planeImage, x, y, self.pop[i])
         # instantiate the radars
         self.spawnRadar(80)  # the first pipe with x as the baseline
-        while self.frontRadar.rect.x < SCREEN_WIDTH:
+        while self.frontRadar.rect.x < st.SCREEN_WIDTH:
             self.spawnRadar()
         # create the background
         Background(self, self.backgroundImage)
@@ -104,7 +105,7 @@ class Game:
     def loadImages(self):
 
         def _load_one_image(file_name):
-            return pg.image.load(os.path.join(IMG_DIR, file_name)).convert_alpha()
+            return pg.image.load(os.path.join(st.IMG_DIR, file_name)).convert_alpha()
 
         self.planeImage = _load_one_image('airplane.png')
         self.radarImages = [_load_one_image(name) for name in ['radarTop.png', 'radarBottom.png']]
@@ -119,23 +120,23 @@ class Game:
         """
         if frontX is None:
             frontX = self.frontRadar.rect.x
-        radarSpace = random.randint(MIN_RADAR_SPACE, MAX_RADAR_SPACE)
+        radarSpace = random.randint(st.MIN_RADAR_SPACE, st.MAX_RADAR_SPACE)
         centerx = frontX + radarSpace
-        d_gap = MAX_RADAR_GAP - MIN_RADAR_GAP
-        d_space = MAX_RADAR_SPACE - MIN_RADAR_SPACE
-        if radarSpace > (MIN_RADAR_SPACE + MAX_RADAR_SPACE) / 2:
-            gap = random.randint(MIN_RADAR_GAP, MAX_RADAR_GAP)
+        d_gap = st.MAX_RADAR_GAP - st.MIN_RADAR_GAP
+        d_space = st.MAX_RADAR_SPACE - st.MIN_RADAR_SPACE
+        if radarSpace > (st.MIN_RADAR_SPACE + st.MAX_RADAR_SPACE) / 2:
+            gap = random.randint(st.MIN_RADAR_GAP, st.MAX_RADAR_GAP)
         else:
-            gap = random.randint(int(MAX_RADAR_GAP - d_gap * (radarSpace - MIN_RADAR_SPACE) / d_space),
-                                 MAX_RADAR_GAP) + 8
+            gap = random.randint(int(st.MAX_RADAR_GAP - d_gap * (radarSpace - st.MIN_RADAR_SPACE) / d_space),
+                                 st.MAX_RADAR_GAP) + 8
         # if pipe space is too small, then the top_length should be similar to the previous one
-        if radarSpace - MIN_RADAR_GAP < d_space // 3:
+        if radarSpace - st.MIN_RADAR_GAP < d_space // 3:
             top_length = self.frontRadar.length + random.randint(-50, 50)
         else:
-            top_length = random.randint(MIN_RADAR_LENGTH, SCREEN_HEIGHT - gap - MIN_RADAR_LENGTH)
+            top_length = random.randint(st.MIN_RADAR_LENGTH, st.SCREEN_HEIGHT - gap - st.MIN_RADAR_LENGTH)
         if self.frontRadar is not None:
             gap += abs(top_length - self.frontRadar.length) // 10
-        bottom_length = SCREEN_HEIGHT - gap - top_length
+        bottom_length = st.SCREEN_HEIGHT - gap - top_length
         topRadar = Radar(self, self.radarImages[0], centerx, top_length, RadarType.TOP)
         bottomRadar = Radar(self, self.radarImages[1], centerx, bottom_length, RadarType.BOTTOM)
         self.frontRadar = topRadar
@@ -153,16 +154,14 @@ class Game:
             return
         # one generation finished and perform evolution again
         # if current distanceScore is very low, then we use a large mutation rate
-        pb = MUT_PB
+        pb = st.MUT_PB
         if self.maxDistanceScore < 100:
-            pb = MUT_PB * 10
+            pb = st.MUT_PB * 10
         elif self.maxDistanceScore < 1000:
-            pb = MUT_PB * 5
+            pb = st.MUT_PB * 5
         elif self.maxDistanceScore < 3000:
-            pb = MUT_PB * 2
-        elif self.maxDistanceScore < 5000:
-            pb = MUT_PB * 1.2
-        self.pop = cgp.evolve(self.pop, pb, MU, LAMBDA, MU_WEIGHTS)
+            pb = st.MUT_PB * 2
+        self.pop = cgp.evolve(self.pop, pb, st.MU, st.LAMBDA, st.MU_WEIGHTS)
 
     def pause(self):
         """
@@ -180,8 +179,8 @@ class Game:
                     if ctrl_held and event.key == pg.K_p:
                         self._is_paused = False
                         return
-                self.drawText("Paused", x=SCREEN_WIDTH // 2 - 50, y=SCREEN_HEIGHT // 2 - 10,
-                              color=WHITE, size=2 * FONT_SIZE)
+                self.drawText("Paused", x=st.SCREEN_WIDTH // 2 - 50, y=st.SCREEN_HEIGHT // 2 - 10,
+                              color=st.WHITE, size=2 * st.FONT_SIZE)
                 pg.display.update()
                 pg.time.wait(50)
 
@@ -201,11 +200,11 @@ class Game:
                         self._is_paused = True
                         self.pause()
                     elif event.key == pg.K_1:  # ctrl + 1 (2, 3): standard frame rate
-                        self._fps = FPS
+                        self._fps = st.FPS
                     elif event.key == pg.K_2:
-                        self._fps = 2 * FPS
+                        self._fps = 2 * st.FPS
                     elif event.key == pg.K_3:
-                        self._fps = 3 * FPS
+                        self._fps = 3 * st.FPS
 
         for plane in self.planes:
             self.tryAction(plane)
@@ -229,7 +228,7 @@ class Game:
             return frontTarget
         except ValueError:
             self.numTargets += 1
-            return Target(self, self.targetImage, random.randint(SCREEN_WIDTH, SCREEN_WIDTH * 1.2), random.randint(100, 400))
+            return Target(self, self.targetImage, random.randint(st.SCREEN_WIDTH, st.SCREEN_WIDTH * 1.2), random.randint(100, 400))
 
     def tryAction(self, plane):
         """
@@ -265,24 +264,24 @@ class Game:
             return
         # move the radars backwards such that planes seem to fly
         leadingPlane = max(self.planes, key=lambda b: b.rect.x)
-        if leadingPlane.rect.x < SCREEN_WIDTH / 3:
+        if leadingPlane.rect.x < st.SCREEN_WIDTH / 3:
             for plane in self.planes:
-                plane.moveBy(dx=PLANE_X_SPEED)
+                plane.moveBy(dx=st.PLANE_X_SPEED)
             for bullet in self.bullets:
                 bullet.moveBy(dx=3)
         else:
             for radar in self.radars:
-                radar.moveBy(dx=-PLANE_X_SPEED)
+                radar.moveBy(dx=-st.PLANE_X_SPEED)
                 if radar.rect.x < -50:
                     radar.kill()
             for target in self.targets:
-                target.moveBy(dx=-PLANE_X_SPEED)
+                target.moveBy(dx=-st.PLANE_X_SPEED)
                 if target.rect.x < -50:
                     target.kill()
             # TODO: Angles!
             for bullet in self.bullets:
                 bullet.moveBy(dx=3)
-                if bullet.rect.x > SCREEN_WIDTH or SCREEN_HEIGHT < bullet.rect.y < -10:
+                if bullet.rect.x > st.SCREEN_WIDTH or st.SCREEN_HEIGHT < bullet.rect.y < -10:
                     # Punishes planes who shoot bullets and miss
                     bullet.plane.targetScore -= 0.5
                     bullet.kill()
@@ -311,26 +310,26 @@ class Game:
         self.maxTargetScoreSoFar = max(self.maxTargetScoreSoFar, self.maxTargetScore)
 
         # spawn a new pipe if necessary
-        while self.frontRadar.rect.x < SCREEN_WIDTH:
+        while self.frontRadar.rect.x < st.SCREEN_WIDTH:
             self.spawnRadar()
-            Target(self, self.targetImage, random.randint(SCREEN_WIDTH, SCREEN_WIDTH * 1.2), random.randint(100, 400))
+            Target(self, self.targetImage, random.randint(st.SCREEN_WIDTH, st.SCREEN_WIDTH * 1.2), random.randint(100, 400))
             self.numTargets += 1
 
     def draw(self):
         self.allSprites.draw(self._screen)
         # show distanceScore
         self.drawText('Distance Score: {}'.format(self.maxDistanceScore), 10, 10)
-        self.drawText('Target Score: {}'.format(self.maxTargetScore), 10 + FONT_SIZE + 2, 10)
-        self.drawText('Total Score: {}'.format(self.maxTotalScore), 10 + 2 * (FONT_SIZE + 2), 10)
-        self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10 + 3 * (FONT_SIZE + 2), 10)
-        self.drawText('Generation: {}'.format(self.currentGeneration), 10 + 4 * (FONT_SIZE + 2), 10)
+        self.drawText('Target Score: {}'.format(self.maxTargetScore), 10 + st.FONT_SIZE + 2, 10)
+        self.drawText('Total Score: {}'.format(self.maxTotalScore), 10 + 2 * (st.FONT_SIZE + 2), 10)
+        self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10 + 3 * (st.FONT_SIZE + 2), 10)
+        self.drawText('Generation: {}'.format(self.currentGeneration), 10 + 4 * (st.FONT_SIZE + 2), 10)
         numAlive = len(self.planes)
-        self.drawText('Alive: {} / {}'.format(numAlive, self.numPlanes), 10 + 5 * (FONT_SIZE + 2), 10)
+        self.drawText('Alive: {} / {}'.format(numAlive, self.numPlanes), 10 + 5 * (st.FONT_SIZE + 2), 10)
         self._screen.blit(pg.transform.rotate(self._screen, 90), (0, 0))
         pg.display.flip()
         pg.display.update()
 
-    def drawText(self, text, x, y, color=WHITE, font=FONT_NAME, size=FONT_SIZE):
+    def drawText(self, text, x, y, color=st.WHITE, font=st.FONT_NAME, size=st.FONT_SIZE):
         font = pg.font.SysFont(font, size)
         text_surface = font.render(text, True, color)
         self._screen.blit(pg.transform.rotate(text_surface, -90), (x, y))

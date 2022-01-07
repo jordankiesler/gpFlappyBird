@@ -6,8 +6,7 @@ import math
 
 import pygame as pg
 
-from settings import *
-import settings
+import settings as st
 
 
 class MovableSprite(pg.sprite.Sprite):
@@ -34,25 +33,27 @@ class Plane(MovableSprite):
         self.yVelocity = 0
         self.distanceScore = 0
         self.targetScore = 0
-        self.totalScore = self.distanceScore + (WEIGHT_TARGETS * self.targetScore)
+        self.totalScore = self.distanceScore + (st.WEIGHT_TARGETS * self.targetScore)
         self.angle = 0
 
     def update(self, *args):
         # check whether the plane flies outside the boundary
         # whether it hits a pipe
-        if self.rect.top > SCREEN_HEIGHT or self.rect.bottom < 0:
+        if self.rect.top > st.SCREEN_HEIGHT or self.rect.bottom < 0:
             self.kill()
             return
         if pg.sprite.spritecollideany(self, self.game.radars):
             # If the plane makes a distance score over 1000, more heavily weight it to select from those parents
-            if self.distanceScore > 1000:
-                settings.MU_WEIGHTS = [10, 20, 30, 55, 80, 90, 100]
+            if st.MU_WEIGHTS is not None and self.distanceScore > 1000:
+                if len(st.MU_WEIGHTS) == 7:
+                    st.MU_WEIGHTS = [10, 20, 30, 55, 80, 90, 100]
             self.kill()
             return
         # Assumed that if the plane can make it that far, it can traverse the radar infinitely, so kill and restart
         # If the plane makes it all the way, even more heavily weight it to choose from the distance parents
-        if self.distanceScore >= PLANE_MAX_DISTANCE_ALLOWED:
-            settings.MU_WEIGHTS = [7, 14, 21, 45, 69, 93, 100]
+        if self.distanceScore >= st.PLANE_MAX_DISTANCE_ALLOWED:
+            if st.MU_WEIGHTS is not None and len(st.MU_WEIGHTS) == 7:
+                st.MU_WEIGHTS = [7, 14, 21, 45, 69, 93, 100]
             self.kill()
             return
         self.yVelocity = self.yVelocity
@@ -62,14 +63,14 @@ class Plane(MovableSprite):
         self.angle = min(30, max(angle, -30))
         self.image = pg.transform.rotate(self.originImage, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
-        self.totalScore = self.distanceScore + (WEIGHT_TARGETS * self.targetScore)
+        self.totalScore = self.distanceScore + (st.WEIGHT_TARGETS * self.targetScore)
         # self.totalScore = self.distanceScore + max(0, 50 * self.targetScore)
 
     def turnLeft(self):
-        self.yVelocity = PLANE_Y_SPEED
+        self.yVelocity = st.PLANE_Y_SPEED
 
     def turnRight(self):
-        self.yVelocity = -PLANE_Y_SPEED
+        self.yVelocity = -st.PLANE_Y_SPEED
 
     def goStraight(self):
         self.yVelocity = 0
@@ -120,7 +121,7 @@ class Radar(MovableSprite):
         if type_ == RadarType.TOP:
             self.rect.top = 0
         else:
-            self.rect.bottom = SCREEN_HEIGHT
+            self.rect.bottom = st.SCREEN_HEIGHT
         self.gap = 0
         self.length = length
 
@@ -164,9 +165,9 @@ class Background(pg.sprite.Sprite):
         self._layer = 0
         super().__init__(game.allSprites)
         # if the width of the given image < screen width, then repeat it until we get a wide enough one
-        if image.get_width() < SCREEN_WIDTH:
+        if image.get_width() < st.SCREEN_WIDTH:
             w = image.get_width()
-            repeats = SCREEN_WIDTH // w + 1
+            repeats = st.SCREEN_WIDTH // w + 1
             self.image = pg.Surface((w * repeats, image.get_height()))
             for i in range(repeats):
                 self.image.blit(image, (i * w, 0))
