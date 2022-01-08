@@ -19,6 +19,8 @@ import numpy as np
 import cgp
 import settings as st
 
+runNum = 0
+
 
 # Map Python functions to sympy counterparts for symbolic simplification.
 DEFAULT_SYMBOLIC_FUNCTION_MAP = {
@@ -35,6 +37,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
                    maxTargetSoFarList, bestPlaneScoresList, numTargets):
 
     content = open('./pp/numRuns.txt', 'r').readlines()
+    global runNum
     runNum = int(content[0])
     content[0] = str(runNum + 1)
     out = open('./pp/numRuns.txt', 'w')
@@ -63,7 +66,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
            f"Range of Horizontal Space between Adjacent Radar Pairs: {st.MIN_RADAR_SPACE} - {st.MAX_RADAR_SPACE}\n" \
            f"Range of Gap (Vertical Space) between Pair of Radars:  {st.MIN_RADAR_GAP} - {st.MAX_RADAR_GAP}\n" \
            f"Minimum Length of Radar Beam: {st.MIN_RADAR_LENGTH}\n" \
-           f"Mutation Probability (Weighted for low maximum total scores): {st.MUT_PB}\n" \
+           f"Mutation Probability (Weighted for low maximum total scores): {st.MUT_PB*100}%\n" \
            f"Number of Columns: {st.N_COLS}\n" \
            f"Number of Levels Back: {st.LEVEL_BACK}\n" \
            f"\nLISTS:\n" \
@@ -73,7 +76,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
            f"List of Best in All Previous Generations for Distance Score: {maxDistanceSoFarList} \n" \
            f"List of Best in Generation for Target Score: {maxTargetList} \n" \
            f"List of Best in All Previous Generations for Target Score: {maxTargetSoFarList} \n" \
-           f"List of Scores for the Best Overall Plane in Each Generation: {bestPlaneScoresList}"
+           f"List of Scores for the Best Overall Plane in Each Generation: {bestPlaneScoresList}\n"
 
 
     # Open the file in append & read mode ('a+')
@@ -93,10 +96,12 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
 def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList,
              maxTargetList, maxTargetSoFarList):
 
+    global runNum
+
     generationNum = np.arange(0, generation, 1)
 
     fig, axs = plt.subplots(2)
-    fig.suptitle('Total Score')
+    fig.suptitle(f'Total Score for Run Number {runNum}')
     axs[0].scatter(generationNum, maxTotalList, s=5)
     axs[1].plot(generationNum, maxTotalSoFarList)
     axs[0].set_ylabel("Generational Winner")
@@ -104,7 +109,7 @@ def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDi
     axs[1].set_xlabel("Generation Number")
 
     fig, axs = plt.subplots(2)
-    fig.suptitle('Distance Score')
+    fig.suptitle(f'Distance Score for Run Number {runNum}')
     axs[0].scatter(generationNum, maxDistanceList, s=5)
     axs[1].plot(generationNum, maxDistanceSoFarList)
     axs[0].set_ylabel("Generational Winner")
@@ -112,7 +117,7 @@ def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDi
     axs[1].set_xlabel("Generation Number")
 
     fig, axs = plt.subplots(2)
-    fig.suptitle('Target Score')
+    fig.suptitle(f'Target Score for Run Number {runNum}')
     axs[0].scatter(generationNum, maxTargetList, s=5)
     axs[1].plot(generationNum, maxTargetSoFarList)
     axs[0].set_ylabel("Generational Winner")

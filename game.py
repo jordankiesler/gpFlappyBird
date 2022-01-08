@@ -155,12 +155,12 @@ class Game:
         # one generation finished and perform evolution again
         # if current distanceScore is very low, then we use a large mutation rate
         pb = st.MUT_PB
-        if self.maxDistanceScore < 100:
-            pb = st.MUT_PB * 10
-        elif self.maxDistanceScore < 1000:
-            pb = st.MUT_PB * 5
-        elif self.maxDistanceScore < 3000:
-            pb = st.MUT_PB * 2
+        # if self.maxDistanceScoreSoFar < 100:
+        #     pb = st.MUT_PB * 10
+        # elif self.maxDistanceScoreSoFar < 1000:
+        #     pb = st.MUT_PB * 5
+        # elif self.maxDistanceScore < 3000:
+        #     pb = st.MUT_PB * 2
         self.pop = cgp.evolve(self.pop, pb, st.MU, st.LAMBDA, st.MU_WEIGHTS)
 
     def pause(self):
@@ -318,8 +318,8 @@ class Game:
     def draw(self):
         self.allSprites.draw(self._screen)
         # show distanceScore
-        self.drawText('Distance Score: {}'.format(self.bestPlaneScores[2]), 10, 10)
-        self.drawText('Target Score: {}'.format(self.bestPlaneScores[1]), 10 + st.FONT_SIZE + 2, 10)
+        self.drawText('Distance Score: {}'.format(self.bestPlaneScores[1]), 10, 10)
+        self.drawText('Target Score: {}'.format(self.bestPlaneScores[2]), 10 + st.FONT_SIZE + 2, 10)
         self.drawText('Total Score: {}'.format(self.bestPlaneScores[0]), 10 + 2 * (st.FONT_SIZE + 2), 10)
         self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10 + 3 * (st.FONT_SIZE + 2), 10)
         self.drawText('Generation: {}'.format(self.currentGeneration), 10 + 4 * (st.FONT_SIZE + 2), 10)
