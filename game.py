@@ -318,9 +318,9 @@ class Game:
     def draw(self):
         self.allSprites.draw(self._screen)
         # show distanceScore
-        self.drawText('Distance Score: {}'.format(self.maxDistanceScore), 10, 10)
-        self.drawText('Target Score: {}'.format(self.maxTargetScore), 10 + st.FONT_SIZE + 2, 10)
-        self.drawText('Total Score: {}'.format(self.maxTotalScore), 10 + 2 * (st.FONT_SIZE + 2), 10)
+        self.drawText('Distance Score: {}'.format(self.bestPlaneScores[2]), 10, 10)
+        self.drawText('Target Score: {}'.format(self.bestPlaneScores[1]), 10 + st.FONT_SIZE + 2, 10)
+        self.drawText('Total Score: {}'.format(self.bestPlaneScores[0]), 10 + 2 * (st.FONT_SIZE + 2), 10)
         self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10 + 3 * (st.FONT_SIZE + 2), 10)
         self.drawText('Generation: {}'.format(self.currentGeneration), 10 + 4 * (st.FONT_SIZE + 2), 10)
         numAlive = len(self.planes)

@@ -8,10 +8,65 @@ import settings as st
 
 
 def main():
+    st.N_COLS = 250
+    for mutationProbability in range(1, 10002, 1000):  # 10 runs
+        # for _ in range(3):
+        st.MUT_PB = (mutationProbability / 1000)  # Gives range of 0.001% to 10%
+        random.seed(st.RANDOM_SEED)
+        game = gm.Game()
+        while game.running and game.currentGeneration < st.N_GEN:
+            game.reset()
+            game.run()
+
+        if st.PP_PLOT_DATA:
+            plotData(game.currentGeneration, game.maxTotalList, game.maxTotalSoFarList, game.maxDistanceList,
+                     game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList)
+
+        if st.PP_WRITE_TO_TEXT:
+            writeRunToFile(game.currentGeneration, game.maxTotalScoreSoFar, game.maxDistanceScoreSoFar,
+                           game.maxTargetScoreSoFar, game.maxTotalList, game.maxTotalSoFarList,
+                           game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList,
+                           game.maxTargetSoFarList,
+                           game.bestPlaneScoresList, game.numTargets)
+
+    st.MUT_PB = 0.015
+    st.MU_WEIGHTS = None
+    for popSize in range(103, 2, 10):  # 10 runs
+        random.seed(st.RANDOM_SEED)
+        if popSize > 80:
+            st.MU = [8, 4, 4]
+        elif popSize > 50:
+            st.MU = [6, 3, 3]
+        elif popSize > 30:
+            st.MU = [4, 2, 2]
+        elif popSize > 10:
+            st.MU = [2, 1, 1]
+        elif popSize > 0:
+            st.MU = [1]
+        st.LAMBDA = popSize - sum(st.MU)
+
+        random.seed(st.RANDOM_SEED)
+        game = gm.Game()
+        while game.running and game.currentGeneration < st.N_GEN:
+            game.reset()
+            game.run()
+
+        if st.PP_PLOT_DATA:
+            plotData(game.currentGeneration, game.maxTotalList, game.maxTotalSoFarList, game.maxDistanceList,
+                     game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList)
+
+        if st.PP_WRITE_TO_TEXT:
+            writeRunToFile(game.currentGeneration, game.maxTotalScoreSoFar, game.maxDistanceScoreSoFar,
+                           game.maxTargetScoreSoFar, game.maxTotalList, game.maxTotalSoFarList,
+                           game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList,
+                           game.maxTargetSoFarList,
+                           game.bestPlaneScoresList, game.numTargets)
+
 
     for numNodes in range(25, 1026, 50):
         for _ in range(3):
             st.N_COLS = numNodes
+            st.RANDOM_SEED = random.randint(1, 100000)
             random.seed(st.RANDOM_SEED)
             game = gm.Game()
             while game.running and game.currentGeneration < st.N_GEN:
