@@ -3,14 +3,29 @@ Entrance of the program.
 """
 import game as gm
 from postprocessing import *
+import plotting
 import random
 import settings as st
 
 
 def main():
-    st.MUT_PB = 0.01
-    st.RANDOM_SEED = random.randint(1, 100000)
+    st.N_GEN = 100
+    st.RANDOM_SEED = 88307 # random.randint(1, 100000)
     random.seed(st.RANDOM_SEED)
+    st.MU = [4, 2, 2]
+    st.LAMBDA = 50 - sum(st.MU)
+    st.MU_WEIGHTS = [12, 24, 36, 48, 62, 74, 86, 100]
+    # if popSize >= 80:
+    #     st.MU = [8, 4, 4]
+    # elif popSize >= 50:
+    #     st.MU = [6, 3, 3]
+    # elif popSize >= 30:
+    #     st.MU = [4, 2, 2]
+    # elif popSize >= 10:
+    #     st.MU = [2, 1, 1]
+    # elif popSize > 0:
+    #     st.MU = [1]
+    # st.LAMBDA = popSize - sum(st.MU)
     game = gm.Game()
     while game.running and game.currentGeneration < st.N_GEN:
         game.reset()
@@ -19,15 +34,17 @@ def main():
     if st.PP_WRITE_TO_TEXT:
         writeRunToFile(game.currentGeneration, game.maxTotalScoreSoFar, game.maxDistanceScoreSoFar,
                        game.maxTargetScoreSoFar, game.maxTotalList, game.maxTotalSoFarList,
-                       game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList,
-                       game.maxTargetSoFarList,
+                       game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList,
                        game.bestPlaneScoresList, game.numTargets)
 
     if st.PP_PLOT_DATA:
         plotData(game.currentGeneration, game.maxTotalList, game.maxTotalSoFarList, game.maxDistanceList,
                  game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList)
 
-
+    if st.PP_PLOT_ALL:
+        plotAll(st.allPlanes, st.all4ks, st.RANDOM_SEED)
+        plotting.plotTargetScores(st.all4ks)
+        plotting.plotNumReachMax(st.all4ks)
 
     #
     # st.N_COLS = 250

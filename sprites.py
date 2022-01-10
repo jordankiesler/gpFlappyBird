@@ -40,6 +40,8 @@ class Plane(MovableSprite):
         # check whether the plane flies outside the boundary
         # whether it hits a pipe
         if self.rect.top > st.SCREEN_HEIGHT or self.rect.bottom < 0:
+            st.allPlanes[-1].append(self.totalScore)
+            # st.allPlanesDistance[-1].append(self.distanceScore)
             self.kill()
             return
         if pg.sprite.spritecollideany(self, self.game.radars):
@@ -47,6 +49,8 @@ class Plane(MovableSprite):
             if st.MU_WEIGHTS is not None and self.distanceScore > 1000:
                 if len(st.MU_WEIGHTS) == 7:
                     st.MU_WEIGHTS = [10, 20, 30, 55, 80, 90, 100]
+            st.allPlanes[-1].append(self.totalScore)
+            # st.allPlanesDistance[-1].append(self.distanceScore)
             self.kill()
             return
         # Assumed that if the plane can make it that far, it can traverse the radar infinitely, so kill and restart
@@ -54,6 +58,9 @@ class Plane(MovableSprite):
         if self.distanceScore >= st.PLANE_MAX_DISTANCE_ALLOWED:
             if st.MU_WEIGHTS is not None and len(st.MU_WEIGHTS) == 7:
                 st.MU_WEIGHTS = [7, 14, 21, 45, 69, 93, 100]
+            st.allPlanes[-1].append(self.totalScore)
+            st.all4ks[-1].append([self.totalScore, self.targetScore])
+            # st.allPlanesDistance[-1].append(self.distanceScore)
             self.kill()
             return
         self.yVelocity = self.yVelocity

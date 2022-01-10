@@ -55,6 +55,9 @@ class Game:
         self.maxDistanceScore = 0                   # Max Score for distance only of best overall plane in generation
         self.maxTargetScore = 0                     # Max dScore for targets only of best overall plane in generation
         self.bestPlaneScores = [0, 0, 0]            # Keeps track of all numbers for a single plane that's the best
+        self.allPlanesTotal = []
+        self.allPlanesDistance = []
+        self.allPlanesTarget = []
 
         self.maxTotalList = []                      # Lists to hold the winners of each generation and total
         self.maxDistanceList = []
@@ -79,6 +82,9 @@ class Game:
         self.maxDistanceSoFarList.append(self.maxDistanceScoreSoFar)
         self.maxTargetList.append(self.maxTargetScore)
         self.maxTargetSoFarList.append(self.maxTargetScoreSoFar)
+
+        st.allPlanes.append([])
+        st.all4ks.append([])
 
         # Reset relevant values
         self.maxTotalScore = 0
@@ -202,7 +208,7 @@ class Game:
                     elif event.key == pg.K_1:  # ctrl + 1 (2, 3): standard frame rate
                         self._fps = st.FPS
                     elif event.key == pg.K_2:
-                        self._fps = 2 * st.FPS
+                        self._fps = 0.5 * st.FPS
                     elif event.key == pg.K_3:
                         self._fps = 3 * st.FPS
 
@@ -292,6 +298,7 @@ class Game:
         for bullet in self.bullets:
             if pg.sprite.spritecollide(bullet, self.targets, dokill=True):
                 bullet.plane.targetScore += 4
+                # bullet.kill()
 
         # Sorts planes to find one with highest total score, and sets appropriate values (repeat for dist and targets)
         sortedPlanes = sorted(self.planes, key=lambda plane: plane.totalScore)
@@ -318,7 +325,8 @@ class Game:
     def draw(self):
         self.allSprites.draw(self._screen)
         # show distanceScore
-        self.drawText('Distance Score: {}'.format(self.bestPlaneScores[1]), 10, 10)
+        # self.drawText('Distance Score: {}'.format(self.bestPlaneScores[1]), 10, 10)
+        self.drawText('Distance Score: {}'.format(self.maxDistanceScore), 10, 10)
         self.drawText('Target Score: {}'.format(self.bestPlaneScores[2]), 10 + st.FONT_SIZE + 2, 10)
         self.drawText('Total Score: {}'.format(self.bestPlaneScores[0]), 10 + 2 * (st.FONT_SIZE + 2), 10)
         self.drawText('Max Total Score so far: {}'.format(self.maxTotalScoreSoFar), 10 + 3 * (st.FONT_SIZE + 2), 10)
