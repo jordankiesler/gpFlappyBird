@@ -41,7 +41,6 @@ class Plane(MovableSprite):
         # whether it hits a pipe
         if self.rect.top > st.SCREEN_HEIGHT or self.rect.bottom < 0:
             st.allPlanes[-1].append(self.totalScore)
-            # st.allPlanesDistance[-1].append(self.distanceScore)
             self.kill()
             return
         if pg.sprite.spritecollideany(self, self.game.radars):
@@ -50,7 +49,6 @@ class Plane(MovableSprite):
                 if len(st.MU_WEIGHTS) == 7:
                     st.MU_WEIGHTS = [10, 20, 30, 55, 80, 90, 100]
             st.allPlanes[-1].append(self.totalScore)
-            # st.allPlanesDistance[-1].append(self.distanceScore)
             self.kill()
             return
         # Assumed that if the plane can make it that far, it can traverse the radar infinitely, so kill and restart
@@ -60,7 +58,6 @@ class Plane(MovableSprite):
                 st.MU_WEIGHTS = [7, 14, 21, 45, 69, 93, 100]
             st.allPlanes[-1].append(self.totalScore)
             st.all4ks[-1].append([self.totalScore, self.targetScore])
-            # st.allPlanesDistance[-1].append(self.distanceScore)
             self.kill()
             return
         self.yVelocity = self.yVelocity
@@ -146,7 +143,7 @@ class Target(MovableSprite):
         super().kill()
 
 
-# TODO: ANGLES!
+# Class for bullet sprite - takes plane as a parameter to know which plane to score
 class Bullet(MovableSprite):
 
     def __init__(self, game, image: pg.Surface, x, y, angle, plane):
@@ -158,7 +155,6 @@ class Bullet(MovableSprite):
         self.rect = self.image.get_rect(x=x, y=y)
         self.angle = angle
         self.plane = plane
-        # self.image = pg.transform.rotate(self.originImage, self.angle)
 
     def moveBy(self, dx=0, dy=0):
         self.rect.move_ip(dx, dx * math.tan(math.degrees(self.angle)))

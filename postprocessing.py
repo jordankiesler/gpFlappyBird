@@ -55,7 +55,6 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
            f"Best Overall Total Score: {sortedPlanes[-1][0]} \n" \
            f"Distance Score of Best Overall: {sortedPlanes[-1][1]} \n" \
            f"Target Score of Best Overall: {sortedPlanes[-1][2]} \n" \
-           f"Theoretical Maximum Score: {st.PLANE_MAX_DISTANCE_ALLOWED + (st.WEIGHT_TARGETS * (numTargets*2))}\n" \
            f"\nPARAMETERS:\n" \
            f"Random Seed: {st.RANDOM_SEED} \n" \
            f"Mu: {st.MU}   Mu Weights: {st.MU_WEIGHTS}    Lambda: {st.LAMBDA} \n" \
@@ -66,23 +65,19 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
            f"Range of Horizontal Space between Adjacent Radar Pairs: {st.MIN_RADAR_SPACE} - {st.MAX_RADAR_SPACE}\n" \
            f"Range of Gap (Vertical Space) between Pair of Radars:  {st.MIN_RADAR_GAP} - {st.MAX_RADAR_GAP}\n" \
            f"Minimum Length of Radar Beam: {st.MIN_RADAR_LENGTH}\n" \
-           f"Mutation Probability (Weighted for low maximum total scores): {st.MUT_PB*100}%\n" \
+           f"Mutation Probability: {st.MUT_PB*100}%\n" \
            f"Number of Columns: {st.N_COLS}\n" \
            f"Number of Levels Back: {st.LEVEL_BACK}\n" \
            f"\nLISTS:\n" \
-           f"List of Best in Generation for Total Score: {maxTotalList} \n" \
-           f"List of Best in All Previous Generations for Total Score: {maxTotalSoFarList} \n" \
-           f"List of Best in Generation for Distance Score: {maxDistanceList} \n" \
-           f"List of Best in All Previous Generations for Distance Score: {maxDistanceSoFarList} \n" \
-           f"List of Best in Generation for Target Score: {maxTargetList} \n" \
-           f"List of Best in All Previous Generations for Target Score: {maxTargetSoFarList} \n" \
-           f"List of Scores for the Best Overall Plane in Each Generation: {bestPlaneScoresList}\n"
+           f"List of Best in Generation for Total Score: {maxTotalList}, \n" \
+           f"List of Best in All Previous Generations for Total Score: {maxTotalSoFarList}, \n" \
+           f"List of Best in Generation for Distance Score: {maxDistanceList}, \n" \
+           f"List of Best in All Previous Generations for Distance Score: {maxDistanceSoFarList}, \n" \
+           f"List of Best in Generation for Target Score: {maxTargetList}, \n" \
+           f"List of Best in All Previous Generations for Target Score: {maxTargetSoFarList}, \n" \
+           f"List of Scores for the Best Overall Plane in Each Generation: {bestPlaneScoresList},\n"
 
-
-    # Open the file in append & read mode ('a+')
     with open("./pp/trainingData.txt", "a+") as file:
-        # Get what run number it is
-
         # Move read cursor to the start of file.
         file.seek(0)
         # If file is not empty then append '\n'
@@ -123,6 +118,61 @@ def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDi
     axs[0].set_ylabel("Generational Winner")
     axs[1].set_ylabel("Max Pop Fitness")
     axs[1].set_xlabel("Generation Number")
+    plt.show()
+
+
+def plotAll(data, fourK, title):
+
+    plt.figure()
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+        # x = np.ones(len(data[i]))
+            x = len(data[i])
+            x *= i
+            plt.scatter(x, data[i][j], c='black', alpha=0.5)
+
+    plt.title(f"Final {title} Score of All Planes")
+    plt.xlabel("Generation Number")
+    plt.ylabel("Total Score")
+    plt.ylim(bottom=-100)
+
+    global runNum
+    text = f"Run {runNum}\n" \
+           f"Parameter: {title}\n" \
+           f"{data}"
+
+    # Open the file in append & read mode ('a+')
+    with open("./pp/allScores.txt", "a+") as file:
+    # with open("./pp/trainingDataChangedBullets.txt", "a+") as file:
+        # Get what run number it is
+
+        # Move read cursor to the start of file.
+        file.seek(0)
+        # If file is not empty then append '\n'
+        data = file.read(100)
+        if len(data) > 0:
+            file.write("\n\n")
+        # Append text at the end of file
+        file.write(text)
+
+    text2 = f"Run {runNum}\n" \
+            f"Pop Size: {sum(st.MU)+st.LAMBDA}\n" \
+            f"{fourK}"
+
+    # Open the file in append & read mode ('a+')
+    with open("./pp/4kAverages.txt", "a+") as file:
+    # with open("./pp/trainingDataChangedBullets.txt", "a+") as file:
+        # Get what run number it is
+
+        # Move read cursor to the start of file.
+        file.seek(0)
+        # If file is not empty then append '\n'
+        data = file.read(100)
+        if len(data) > 0:
+            file.write("\n\n")
+        # Append text at the end of file
+        file.write(text2)
+
     plt.show()
 
 

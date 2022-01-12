@@ -12,16 +12,16 @@ FONT_NAME = 'Arial'
 FONT_SIZE = 20
 WHITE = (255, 255, 255)
 
-PLANE_Y_SPEED = -3.5        # once the plane turns, its vertical speed becomes this value
-PLANE_X_SPEED = 3           # the const horizontal speed of the plane
+PLANE_Y_SPEED = -3.5        # once the plane turns, its side to side speed becomes this value
+PLANE_X_SPEED = 3           # the const forward speed of the plane
 
 PLANE_MAX_DISTANCE_ALLOWED = 4000   # max distance plane allowed to fly before resetting
 WEIGHT_TARGETS = 10                 # how heavily target points are weighted against distance pts
 
 
-MIN_RADAR_SPACE = 175       # horizontal space between two adjacent pairs of radars
+MIN_RADAR_SPACE = 175       # vertical space between two adjacent pairs of radars
 MAX_RADAR_SPACE = 340
-MIN_RADAR_GAP = 120         # gap (vertical space) between a pair of radars
+MIN_RADAR_GAP = 120         # gap (horizontal space) between a pair of radars
 MAX_RADAR_GAP = 180
 MIN_RADAR_LENGTH = 80       # minimum length of a radar beam
 

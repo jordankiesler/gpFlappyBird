@@ -9,12 +9,12 @@ import settings as st
 
 
 def main():
-    st.N_GEN = 100
-    st.RANDOM_SEED = 88307 # random.randint(1, 100000)
+    st.N_GEN = 100000
+    st.RANDOM_SEED = random.randint(1, 100000)
     random.seed(st.RANDOM_SEED)
-    st.MU = [4, 2, 2]
-    st.LAMBDA = 50 - sum(st.MU)
-    st.MU_WEIGHTS = [12, 24, 36, 48, 62, 74, 86, 100]
+    st.MU = [10, 7, 3]
+    st.LAMBDA = 75 - sum(st.MU)
+    st.MU_WEIGHTS = None
     # if popSize >= 80:
     #     st.MU = [8, 4, 4]
     # elif popSize >= 50:

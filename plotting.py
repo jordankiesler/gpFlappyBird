@@ -133,11 +133,13 @@ if __name__ == '__main__':
 
     # postprocessing.plotAll(lol.thousandGens, "Thousand Generations")
     # plot3D(lol.thousandGens60)
+
     # y1 = [item for item in lol.run64 if item[1] == 4000]
     # y2 = [item[2] for item in y1]
     # plotOneValue(y2)
     # plotDataBestPlane(lol.example3D_run4)
+    plotDataBestPlane(ml.fixOverfitted_119)
 
     # plotTargetScores(ml.fourk_101)
-    plotNumReachMax(ml.fourk_101)
-    plotNumReachMax(ml.fourk_107)
+    # plotNumReachMax(ml.fourk_101)
+    # plotNumReachMax(ml.fourk_107)

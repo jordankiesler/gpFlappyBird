@@ -3,7 +3,7 @@ import operator as op
 import random
 import math
 import settings as st
-
+import numpy as np
 
 class Function:
 
@@ -167,30 +167,54 @@ class Individual:
         return child
 
 
+# def evolve(pop, mutRate, numParents, numChildren, parentWeights):
+#     # Sort population to find the ones with highest fitness for all categories
+#     pop0 = sorted(pop, key=lambda genotype: genotype.totalFitness)
+#     pop1 = sorted(pop, key=lambda genotype: genotype.distanceFitness)
+#     pop2 = sorted(pop, key=lambda genotype: genotype.targetFitness)
+#
+#     # Slice off the fittest numParents for each category to be parents of the next generation
+#     parents = pop0[-numParents[0]:] + pop1[-numParents[1]:] + pop2[-numParents[2]:]
+#     # If multiple individuals are the same (i.e. the same individual had highest total score and highest fitness), then
+#     # discard the repeats and choose the next fittest  distance wise (didn't use a set b/c wanted to keep order)
+#     parentSet = list(dict.fromkeys(parents))
+#     sumParents = sum(numParents)
+#     newParent = numParents[1]
+#     while len(parentSet) < sumParents:
+#         newParent += 1
+#         parentSet.append(pop1[-newParent])
+#         parentSet = list(dict.fromkeys(parentSet))
+#
+#
+#     # Weigh the likelihood of which parents get chosen - i.e., parents with good distance can get chosen more often
+#     if parentWeights is None:
+#         weightedParents = random.choices(parentSet)
+#     else:
+#         weightedParents = random.choices(parentSet, cum_weights=parentWeights)
+#
+#     # Initialize an empty list to hold the kiddos
+#     children = []
+#     # Pick a parent at random and add their mutated genotype to the list of lil kids
+#     for _ in range(numChildren):
+#         # parent = random.choice(weightedParents)
+#         parent = random.choice(weightedParents)
+#         children.append(parent.mutate(mutRate))
+#
+#     return parents + children
+
 def evolve(pop, mutRate, numParents, numChildren, parentWeights):
     # Sort population to find the ones with highest fitness for all categories
     pop0 = sorted(pop, key=lambda genotype: genotype.totalFitness)
     pop1 = sorted(pop, key=lambda genotype: genotype.distanceFitness)
     pop2 = sorted(pop, key=lambda genotype: genotype.targetFitness)
 
-    # Slice off the fittest numParents for each category to be parents of the next generation
     parents = pop0[-numParents[0]:] + pop1[-numParents[1]:] + pop2[-numParents[2]:]
 
-    # If multiple individuals are the same (i.e. the same individual had highest total score and highest fitness), then
-    # discard the repeats and choose the next fittest  distance wise (didn't use a set b/c wanted to keep order)
-    parentSet = list(dict.fromkeys(parents))
-    sumParents = sum(numParents)
-    newParent = numParents[1]
-    while len(parentSet) < sumParents:
-        newParent += 1
-        parentSet.append(pop1[-newParent])
-        parentSet = list(dict.fromkeys(parentSet))
+    weightList = np.ones(len(pop0))
+    for i in range(int(len(pop0)/1.5), len(pop0)):
+        weightList[i] *= (1+(i/10))
 
-    # Weigh the likelihood of which parents get chosen - i.e., parents with good distance can get chosen more often
-    if parentWeights is None:
-        weightedParents = random.choices(parentSet)
-    else:
-        weightedParents = random.choices(parentSet, cum_weights=parentWeights)
+    weightedParents = random.choices(pop0, cum_weights=weightList)
 
     # Initialize an empty list to hold the kiddos
     children = []
