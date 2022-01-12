@@ -1,42 +1,35 @@
-"""Postprocess the graph evolved by CGP.
-
-- Simplify the obtained math formula.
-- Visualize the expression tree corresponding to the formula that is embedded in the CGP graph.
-
-Reference
-1. [`geppy.support.simplification`](https://geppy.readthedocs.io/en/latest/geppy.support.html#module-geppy.support.simplification).
-2. [Binary expression tree](https://en.wikipedia.org/wiki/Binary_expression_tree). Note that the operators are not required
-to be binary though.
-"""
-import sympy as sp
 import operator
-import math
-from typing import Dict, Sequence
-import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-import cgp
 import settings as st
 
-runNum = 0
-
-
-# Map Python functions to sympy counterparts for symbolic simplification.
-DEFAULT_SYMBOLIC_FUNCTION_MAP = {
-    operator.add.__name__: operator.add,
-    operator.sub.__name__: operator.sub,
-    operator.mul.__name__: operator.mul,
-    operator.neg.__name__: operator.neg,
-    'div': operator.truediv,
-}
+runNum = 0      # Global variable used to denote runs and manage data across files
 
 
 def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTargetScoreSoFar,
                    maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList, maxTargetList,
                    maxTargetSoFarList, bestPlaneScoresList, numTargets):
+    """
+    Write all the relevant information to a dataTraining file
+    :param generation: Number of generations
+    :param maxTotalScoreSoFar: Best total score for entire simulation
+    :param maxDistanceScoreSoFar: Best distance score for entire simulation
+    :param maxTargetScoreSoFar: Best target score for entire simulation
+    :param maxTotalList: List of the best total score achieved for each generation
+    :param maxTotalSoFarList: List of the best total score achieved to date per generation
+    :param maxDistanceList: List of the best distance score achieved for each generation
+    :param maxDistanceSoFarList: List of the best distance score achieved to date per generation
+    :param maxTargetList: List of the best target score achieved for each generation
+    :param maxTargetSoFarList: List of the best target score achieved to date per generation
+    :param bestPlaneScoresList: List of the composite scores of the best drone for each generation
+    :param numTargets: Total number of targets (I think this is inaccurate - could use some tweaking
+    :return: none
+    """
 
     content = open('./pp/numRuns.txt', 'r').readlines()
+
+    # Collect what the current run number is and then increase it by one (dedicated file for this)
     global runNum
     runNum = int(content[0])
     content[0] = str(runNum + 1)
@@ -90,6 +83,17 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
 
 def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList,
              maxTargetList, maxTargetSoFarList):
+    """
+    Plot the best overall and best in generation for each type of score
+    :param generation: Number of generations
+    :param maxTotalList: List of the best total score achieved for each generation
+    :param maxTotalSoFarList: List of the best total score achieved to date per generation
+    :param maxDistanceList: List of the best distance score achieved for each generation
+    :param maxDistanceSoFarList: List of the best distance score achieved to date per generation
+    :param maxTargetList: List of the best target score achieved for each generation
+    :param maxTargetSoFarList: List of the best target score achieved to date per generation
+    :return: none
+    """
 
     global runNum
 
@@ -118,15 +122,23 @@ def plotData(generation, maxTotalList, maxTotalSoFarList, maxDistanceList, maxDi
     axs[0].set_ylabel("Generational Winner")
     axs[1].set_ylabel("Max Pop Fitness")
     axs[1].set_xlabel("Generation Number")
+
     plt.show()
 
 
-def plotAll(data, fourK, title):
+def collateAllScores(data, fourK, title):
+    """
+    Plot the scores of all planes for all generations
+    and then write those scores to file
+    :param data: List of all planes scores for all generations
+    :param fourK: List of all planes scores that made it the max distance
+    :param title: Title of the plot
+    :return: none
+    """
 
     plt.figure()
     for i in range(len(data)):
         for j in range(len(data[i])):
-        # x = np.ones(len(data[i]))
             x = len(data[i])
             x *= i
             plt.scatter(x, data[i][j], c='black', alpha=0.5)
@@ -141,12 +153,8 @@ def plotAll(data, fourK, title):
            f"Parameter: {title}\n" \
            f"{data}"
 
-    # Open the file in append & read mode ('a+')
+    # Write the scores of all drones for all generations to the file
     with open("./pp/allScores.txt", "a+") as file:
-    # with open("./pp/trainingDataChangedBullets.txt", "a+") as file:
-        # Get what run number it is
-
-        # Move read cursor to the start of file.
         file.seek(0)
         # If file is not empty then append '\n'
         data = file.read(100)
@@ -159,10 +167,8 @@ def plotAll(data, fourK, title):
             f"Pop Size: {sum(st.MU)+st.LAMBDA}\n" \
             f"{fourK}"
 
-    # Open the file in append & read mode ('a+')
+    # Write the scores of all the drones making it to 4000 points to the file
     with open("./pp/4kAverages.txt", "a+") as file:
-    # with open("./pp/trainingDataChangedBullets.txt", "a+") as file:
-        # Get what run number it is
 
         # Move read cursor to the start of file.
         file.seek(0)
@@ -174,86 +180,3 @@ def plotAll(data, fourK, title):
         file.write(text2)
 
     plt.show()
-
-
-def extract_computational_subgraph(ind: cgp.Individual) -> nx.MultiDiGraph:
-    """Extract a computational subgraph of the CGP graph `ind`, which only contains active nodes.
-
-    Args:
-        ind (cgp.Individual): an individual in CGP  
-
-    Returns:
-        nx.DiGraph: a acyclic directed graph denoting a computational graph
-
-    See https://www.deepideas.net/deep-learning-from-scratch-i-computational-graphs/ and 
-    http://www.cs.columbia.edu/~mcollins/ff2.pdf for knowledge of computational graphs.
-    """
-    # make sure that active nodes have been confirmed
-    if not ind.activeNodesDetermined:
-        ind.determineActiveNodes()
-        ind.activeNodesDetermined = True
-    # in the digraph, each node is identified by its index in `ind.nodes`
-    # if node i depends on node j, then there is an edge j->i
-    g = nx.MultiDiGraph()  # possibly duplicated edges
-    for i, node in enumerate(ind.nodes):
-        if node.active:
-            f = ind.functionTable[node.functionIndex]
-            g.add_node(i, func=f.name)
-            order = 1
-            for j in range(f.arity):
-                i_input = node.inputIndices[j]
-                w = node.inputWeights[j]
-                g.add_edge(i_input, i, weight=w, order=order)
-                order += 1
-
-    return g
-
-
-def simplify(g: nx.MultiDiGraph, input_names: Sequence = None, symbolic_function_map: Dict = None):
-    """Compile computational graph `g` into a (possibly simplified) symbolic expression.
-
-    Args:
-        g (nx.MultiDiGraph): a computational graph
-        symbolic_function_map ([Dict], optional): Map each function to a symbolic one in `sympy`. Defaults to None.
-            If `None`, then the `DEFAULT_SYMBOLIC_FUNCTION_MAP` is used.
-        input_names (Sequence): a list of names, each for one input. If `None`, then a default name "vi" is used
-            for the i-th input.
-    
-    Return:
-        a (simplified) symbol expression
-    
-    For example, `add(sub(3, 3), x)` may be simplified to `x`. Note that this method is used to simplify the 
-    **final** solution rather than during evolution. 
-    """
-    if symbolic_function_map is None:
-        symbolic_function_map = DEFAULT_SYMBOLIC_FUNCTION_MAP
-
-    # toplogical sort such that i appears before j if there is an edge i->j
-    ts = list(nx.topological_sort(g))
-    d = dict()
-    for node_id in ts:
-        if node_id < 0:  # inputs in CGP
-            d[node_id] = sp.Symbol(
-                f"v{-node_id}" if input_names is None else input_names[-node_id - 1])
-        else:  # a function node
-            inputs = []
-            # print(g.in_edges(node_id))
-            for input_node_id in g.predecessors(node_id):
-                # possibly parallel edges
-                for attr in g.get_edge_data(input_node_id, node_id).values():
-                    inputs.append(
-                        (input_node_id, attr["weight"], attr["order"]))
-            inputs.sort(key=operator.itemgetter(2))
-            args = (ip[1] * d[ip[0]] for ip in inputs)
-            func = g.nodes[node_id]["func"]
-            sym_func = symbolic_function_map[func]
-            r = sym_func(*args)
-            d[node_id] = sp.simplify(r) if st.PP_FORMULA_SIMPLIFICATION else r
-    # the unique output is the last node
-    return d[ts[-1]]
-
-
-def round_expr(expr, num_digits):
-    # https://stackoverflow.com/questions/48491577/printing-the-output-rounded-to-3-decimals-in-sympy
-    return expr.xreplace({n: round(n, num_digits) for n in expr.atoms(sp.Number)})
-

@@ -1,16 +1,22 @@
-import random
-
 import matplotlib.pyplot as plt
 import numpy as np
 import listOfLists as lol
 import moreLists as ml
-import postprocessing
 from mpl_toolkits import mplot3d
 from matplotlib import cm
 
 
-# Plot comparisons of total scores, distance scores, and target scores for various scenarios (i.e. changing node #s)
 def plotComparisons(totalData, distanceData, targetData, labels, title):
+    """
+    Plot parameter sweeps of total scores, distance scores,
+    and target scores for various scenarios (i.e. changing node #s)
+    :param totalData: List of lists of total fitness values per generation per scenario
+    :param distanceData: List of lists of distance fitness values per generation per scenario
+    :param targetData: List of lists of target fitness values per generation per scenario
+    :param labels: List of strings that match length of other data for data labeling
+    :param title: Title of chart
+    :return: none
+    """
     plt.figure()
     fig, axs = plt.subplots(3)
     fig.suptitle(f'Comparison of Values for Changing {title}')
@@ -26,56 +32,55 @@ def plotComparisons(totalData, distanceData, targetData, labels, title):
     axs[2].set_ylabel("Max Target\nScore Overall")
     axs[2].set_xlabel("Generation Number")
 
-    print(f"Pop 100: {totalData[5][-1]}, Total 100: {totalData[3][-1]}")
     # plt.legend()
     plt.show()
 
-# Plot a 3D plot of the composite scores o the best drone from every generation
-def plot3D(data):
-    x = [item[0] for item in data]
-    w = np.arange(0, len(data), 1)
-    y = [item[1] for item in data]
-    z = [item[2] for item in data]
 
-    # Creating figure
+def plot3D(data):
+    """
+    Plot a 3D plot of the composite scores
+    of the best drone from every generation
+    :param data: List of lists containing composite scores [total, distance fitness] for best plane per generation
+    :return: none
+    """
+    w = np.arange(0, len(data), 1)      # Create an array of values representing the number of generations in the data
+    x = [item[0] for item in data]      # Parse list of total score values per generation
+    y = [item[1] for item in data]      # Parse list of distance score values per generation
+    z = [item[2] for item in data]      # Parse list of target score values per generation
+
+    # Create the figure
     fig = plt.figure()
     ax = plt.axes(projection="3d")
 
     # Add x, y gridlines
     ax.grid(visible=True, color='grey', linestyle='-.', linewidth=0.3, alpha=0.2)
 
-    # Creating color map
+    # Create color map
     my_cmap = plt.get_cmap('hsv')
 
-    # Color map is the distance scores
-    sctt = ax.scatter3D(x, w, z, alpha=0.8, c=y, cmap=my_cmap, marker='^')
+    # Color map is the distance scores, three axes are total score, generation, and target score
+    sctt = ax.scatter3D(x, w, z, alpha=0.8, c=y, cmap=my_cmap, marker='^', depthshade=True)
 
-
-    plt.title("simple 3D scatter plot")
+    plt.title("Composite Scores of Best Plane Per Generation")
     ax.set_xlabel('Total Score', fontweight='bold')
     ax.set_ylabel('Generation', fontweight='bold')
     ax.set_zlabel('Target Score', fontweight='bold')
     fig.colorbar(sctt, ax=ax, shrink=0.5, aspect=5)
 
-    # show plot
     plt.show()
 
 
-# Plot one value over time
-def plotOneValue(data):
-    plt.figure()
-    x = np.arange(0, len(data), 1)
-    plt.scatter(x, data)
-    plt.xlabel("Generations")
-    plt.show()
-
-
-# Plot the composite scores for the best plane in each generation on three separate plots
 def plotDataBestPlane(data):
+    """
+    Plot the composite scores for the best plane
+    in each generation on three separate plots
+    :param data: List of lists containing composite scores [total, distance fitness] for best plane per generation
+    :return: none
+    """
 
-    totals = [item[0] for item in data]
-    distance = [item[1] for item in data]
-    targets = [item[2] for item in data]
+    totals = [item[0] for item in data]         # Parse list of total score values per generation
+    distance = [item[1] for item in data]       # Parse list of distance score values per generation
+    targets = [item[2] for item in data]        # Parse list of target score values per generation
 
     generationNum = np.arange(0, len(data), 1)
 
@@ -90,27 +95,52 @@ def plotDataBestPlane(data):
 
     plt.show()
 
+
+def plotOneValue(data):
+    """
+    Plot one value over time
+    :param data: Single list of values (assume one value per generation)
+    :return: none
+    """
+    plt.figure()
+    x = np.arange(0, len(data), 1)
+    plt.scatter(x, data)
+    plt.xlabel("Generations")
+    plt.show()
+
+
 def plotNumReachMax(data):
-    generations = len(data)
+    """
+    Plot the number of drones in a given simulation
+    to reach the maximum distance score
+    :param data: List of lists containing the target scores of all those drones reaching max distance per generation
+    (List is just already made for other data, so this is a convenient recycling of it)
+    :return: none
+    """
 
     plt.figure()
     for i in range(len(data)):
         if data[i]:
-            plt.scatter(i, len(data[i]), color='black', s=5)
+            plt.bar(i, len(data[i]), color='black', s=5)
         else:
             plt.scatter(i, 0, color='black', s=5)
 
-    plt.title("Number of Drones Reaching Maximum Distance, 250 Nodes")
+    plt.title("Number of Drones Reaching Maximum Distance")
     plt.xlabel('Generation')
     plt.ylabel("Number of Drones to Reach Maximum Distance")
     plt.show()
 
+
 def plotTargetScores(data):
-    generations = len(data)
+    """
+    Plots the target scores of all drones reaching the maximum distance
+    :param data: List of lists containing the target scores of all those drones reaching max distance per generation
+    :return: none
+    """
 
     plt.figure()
     for i in range(len(data)):
-        if data[i]:
+        if data[i]:     # Some lists are empty, so check for that
             yVals = [item[1] for item in data[i]]
             xVals = np.ones(len(data[i])) * i
             plt.scatter(xVals, yVals, c='black', alpha=0.1)
@@ -131,14 +161,10 @@ if __name__ == '__main__':
     # plotComparisons(lol.meanPopTotals, lol.meanPopDistance, lol.meanPopTargets, lol.popSizeLabels, "Population Size")
     # plotComparisons(lol.changingPopTotals, lol.changingPopDistance, lol.changingPopTargets, lol.popSizeLabels, "Population Size")
 
-    # postprocessing.plotAll(lol.thousandGens, "Thousand Generations")
-    # plot3D(lol.thousandGens60)
+    plot3D(lol.thousandGens60)
+    # plot2D(lol.thousandGens60)
 
-    # y1 = [item for item in lol.run64 if item[1] == 4000]
-    # y2 = [item[2] for item in y1]
-    # plotOneValue(y2)
-    # plotDataBestPlane(lol.example3D_run4)
-    plotDataBestPlane(ml.fixOverfitted_119)
+    # plotDataBestPlane(ml.fixOverfitted_119)
 
     # plotTargetScores(ml.fourk_101)
     # plotNumReachMax(ml.fourk_101)

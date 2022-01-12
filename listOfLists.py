@@ -1,7 +1,17 @@
+"""This is a sheet of various lists used for plotting and postprocessing, mostly containing the values used
+to perform the parameter sweeps. The full runs of all values can be found in the training data files"""
+
 import numpy as np
 
 
 def getMean(list1, list2, list3):
+    """
+    Calculate the mean for parameter sweeps
+    :param list1: First list of values to average (list of lists - values for each generation for each scenario)
+    :param list2: Second list
+    :param list3: Third list
+    :return: New list of averaged values
+    """
     newList = []
 
     for i in range(len(list1)):

@@ -181,7 +181,7 @@ def evolve(pop, mut_rate, mu, lambda_):
     return parents + offspring
 
 
-def create_population(n):
+def createPopulation(n):
     """
     Create a random population composed of n individuals.
     """
