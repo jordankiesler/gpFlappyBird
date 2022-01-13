@@ -13,10 +13,20 @@ def getMean(list1, list2, list3):
     :return: New list of averaged values
     """
     newList = []
+    variationList = []
 
     for i in range(len(list1)):
         tempList = [list1[i], list2[i], list3[i]]
         newList.append(np.mean(tempList, axis=0))
+
+
+        # Do some basic statistical analysis and print to the terminal
+        std = np.mean(np.std(tempList, axis=0))
+        variation = np.mean(std / np.mean(np.mean(tempList, axis=0)))
+        variationList.append(variation)
+        print("Std Dev:", std, " Variation:", variation)
+
+    print(np.mean(variationList), "\n")
 
     return newList
 
@@ -246,8 +256,11 @@ changingPopTargets = [
      32.5, 32.5],
 ]
 
+print("\nPopulation Size Totals")
 meanPopTotals = getMean(changingPopTotals, changingPopTotals2, changingPopTotals3)
+print("Population Size Distance")
 meanPopDistance = getMean(changingPopDistance, changingPopDistance2, changingPopDistance3)
+print("Population Size Targets")
 meanPopTargets = getMean(changingPopTargets, changingPopTargets2, changingPopTargets3)
 
 
@@ -702,8 +715,11 @@ changingMutationTargets = [
      15.5, 15.5, 15.5, 15.5, 15.5, 15.5],
 ]
 
+print("\nMutation Totals")
 meanMutationTotals = getMean(changingMutationTotals, changingMutationTotals2, changingMutationTotals3)
+print("Mutation Distance")
 meanMutationTargets = getMean(changingMutationTargets, changingMutationTargets2, changingMutationTargets3)
+print("Mutation Targets")
 meanMutationDistance = getMean(changingMutationDistance, changingMutationDistance2, changingMutationDistance3)
 
 nodeLabels = ['10 Nodes', '50 Nodes', '100 Nodes', '250 Nodes', '500 Nodes', '1000 Nodes']
@@ -955,8 +971,11 @@ changingNodeTargets = [
      12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
 ]
 
+print("\nNode Totals")
 meanNodeTotals = getMean(changingNodeTotals, changingNodeTotals2, changingNodeTotals3)
+print("Node Distance")
 meanNodeDistance = getMean(changingNodeDistance, changingNodeTotals2, changingNodeTotals3)
+print("Node Targets")
 meanNodeTargets = getMean(changingNodeTargets, changingNodeTargets2, changingNodeTargets3)
 
 bestPlanes50 = [[0, 0, 0], [158, 159, 0], [190, 151, 3.5], [292, 293, 0], [118, 119, 0], [133, 134, 0], [96, 97, 0],

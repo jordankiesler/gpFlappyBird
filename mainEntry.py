@@ -1,3 +1,5 @@
+import random
+
 import game as gm
 from postprocessing import *
 import plotting
@@ -10,6 +12,9 @@ def main():
     post-processing activities
     :return: none
     """
+    st.N_COLS = 1000
+    st.RANDOM_SEED = 4701
+    random.seed(st.RANDOM_SEED)
     game = gm.Game()
     while game.running and game.currentGeneration < st.N_GEN:
         game.reset()
@@ -22,7 +27,7 @@ def main():
         writeRunToFile(game.currentGeneration, game.maxTotalScoreSoFar, game.maxDistanceScoreSoFar,
                        game.maxTargetScoreSoFar, game.maxTotalList, game.maxTotalSoFarList,
                        game.maxDistanceList, game.maxDistanceSoFarList, game.maxTargetList, game.maxTargetSoFarList,
-                       game.bestPlaneScoresList, game.numTargets)
+                       game.bestPlaneScoresList, game.avgNumActiveNodes)
 
     # Provide the values needed to generate the plots of best in generation and overall for each score category
     if st.PP_PLOT_DATA:

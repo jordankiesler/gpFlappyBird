@@ -66,6 +66,8 @@ class Game:
         self.bestPlaneScoresList = []               # List to hold the composite score of the best plane in each gen
 
         self.pop = cgp.createPopulation(self.numPlanes)    # Create the initial population
+        # List to hold average num of active nodes per generation, starting with the first
+        self.avgNumActiveNodes = [cgp.calculateAvgActiveNodes(self.pop)]
         self.currentGeneration = 0                         # Set the current generation to zero
 
     def reset(self):
@@ -193,6 +195,7 @@ class Game:
         # elif self.maxDistanceScore < 3000:
         #     pb = st.MUT_PB * 2
         self.pop = cgp.evolve(self.pop, pb, st.MU, st.LAMBDA, st.MU_WEIGHTS)
+        self.avgNumActiveNodes.append(cgp.calculateAvgActiveNodes(self.pop))
 
     def pause(self):
         """

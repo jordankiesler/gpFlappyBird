@@ -25,7 +25,7 @@ MIN_RADAR_GAP = 120         # gap (horizontal space) between a pair of radars
 MAX_RADAR_GAP = 180
 MIN_RADAR_LENGTH = 80       # minimum length of a radar beam
 
-MUT_PB = 0.015              # mutate probability (weighted in the game depending on score)
+MUT_PB = 0.010              # mutate probability (weighted in the game depending on score)
 N_COLS = 250                # number of cols (nodes) in a single-row CGP
 LEVEL_BACK = N_COLS         # how many levels back are allowed for inputs in CGP
 
@@ -33,21 +33,15 @@ RANDOM_SEED = random.randint(1, 100000)     # Allows reproducibility
 
 MU = [3, 2, 2]             # List for Mu is number of parents kept for total, distance, and target fitness, respectively
 MU_WEIGHTS = [15, 30, 44, 58, 72, 86, 100]   # List of weights for probability of choosing each parent - begins evenly
-LAMBDA = 30-sum(MU)                                  # Number of children
+LAMBDA = 30-sum(MU)                          # Number of children
 N_GEN = 100                                  # max number of generations
 
 VERBOSE = False              # if True, then additional information will be printed
 
 # Postprocessing
-# if True, then the evolved math formula will be simplified and the corresponding
-# computational graph will be visualized into files under the `pp` directory
-PP_FORMULA = False
-PP_FORMULA_NUM_DIGITS = 5
-PP_FORMULA_SIMPLIFICATION = True
-PP_GRAPH_VISUALIZATION = False
 PP_WRITE_TO_TEXT = True
-PP_PLOT_DATA = True
-PP_PLOT_ALL = True
+PP_PLOT_DATA = False
+PP_PLOT_ALL = False
 
 allPlanes = []
 all4ks = []

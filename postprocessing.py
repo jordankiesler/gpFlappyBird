@@ -9,7 +9,7 @@ runNum = 0      # Global variable used to denote runs and manage data across fil
 
 def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTargetScoreSoFar,
                    maxTotalList, maxTotalSoFarList, maxDistanceList, maxDistanceSoFarList, maxTargetList,
-                   maxTargetSoFarList, bestPlaneScoresList, numTargets):
+                   maxTargetSoFarList, bestPlaneScoresList, activeNodes):
     """
     Write all the relevant information to a dataTraining file
     :param generation: Number of generations
@@ -23,7 +23,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
     :param maxTargetList: List of the best target score achieved for each generation
     :param maxTargetSoFarList: List of the best target score achieved to date per generation
     :param bestPlaneScoresList: List of the composite scores of the best drone for each generation
-    :param numTargets: Total number of targets (I think this is inaccurate - could use some tweaking
+    :param activeNodes: List of the average number of active nodes per generation
     :return: none
     """
 
@@ -38,6 +38,7 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
     out.close()
 
     sortedPlanes = sorted(bestPlaneScoresList, key=lambda score: score[0])
+    averageActiveNodes = np.mean(activeNodes)
 
     text = f"--RUN {runNum}--\n" \
            f"Population Size: {sum(st.MU) + st.LAMBDA}\n" \
@@ -59,8 +60,8 @@ def writeRunToFile(generation, maxTotalScoreSoFar, maxDistanceScoreSoFar, maxTar
            f"Range of Gap (Vertical Space) between Pair of Radars:  {st.MIN_RADAR_GAP} - {st.MAX_RADAR_GAP}\n" \
            f"Minimum Length of Radar Beam: {st.MIN_RADAR_LENGTH}\n" \
            f"Mutation Probability: {st.MUT_PB*100}%\n" \
-           f"Number of Columns: {st.N_COLS}\n" \
-           f"Number of Levels Back: {st.LEVEL_BACK}\n" \
+           f"Number of Columns (Nodes): {st.N_COLS}\n" \
+           f"Overall Average Number of Active Nodes: {averageActiveNodes} ({round(100*averageActiveNodes/st.N_COLS, 2)}%)\n" \
            f"\nLISTS:\n" \
            f"List of Best in Generation for Total Score: {maxTotalList}, \n" \
            f"List of Best in All Previous Generations for Total Score: {maxTotalSoFarList}, \n" \

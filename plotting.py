@@ -26,13 +26,14 @@ def plotComparisons(totalData, distanceData, targetData, labels, title):
         axs[0].plot(x, totalData[i], label=labels[i])
         axs[1].plot(x, distanceData[i], label=labels[i])
         axs[2].plot(x, targetData[i], label=labels[i])
+        print(totalData[i][-1])
 
     axs[0].set_ylabel("Max Total\nScore Overall")
     axs[1].set_ylabel("Max Distance\nScore Overall")
     axs[2].set_ylabel("Max Target\nScore Overall")
     axs[2].set_xlabel("Generation Number")
 
-    # plt.legend()
+    plt.legend()
     plt.show()
 
 
@@ -96,16 +97,38 @@ def plotDataBestPlane(data):
     plt.show()
 
 
-def plotOneValue(data):
+def plotTargetRegression(data):
     """
-    Plot one value over time
-    :param data: Single list of values (assume one value per generation)
+    Plot the target scores for a given simulation along with a
+    nonlinear regression through those scores achieved by drones
+    who flew the full 4000 points (easily modified to do other regressions)
+    :param data: List of lists of best plane scores (i.e., 3 values per generation)
     :return: none
     """
     plt.figure()
-    x = np.arange(0, len(data), 1)
-    plt.scatter(x, data)
+    x = []
+    y = []
+    # Plot points depending on whether they're from planes that flew the full 4000 frames or not
+    for i in range(len(data)):
+        if data[i][1] == 4000:
+            plt.scatter(i, data[i][2], color='red', s=2)
+            x.append(i)
+            y.append(data[i][2])
+        else:
+            plt.scatter(i, data[i][2], color='black', s=2)
+
+    plt.xlim(0)
+    # These are just here to get the labels - otherwise it adds a label for every single black/red point
+    plt.scatter(-50, 0, color='red', label="Drones Reaching Max Distance", s=2)
+    plt.scatter(-50, 0, color='black', label="Drones Not Reaching Max Distance", s=2)
+    # Create a polynomial fit line through the points of drones that flew the max distance
+    plt.plot(x, np.poly1d(np.polyfit(x, y, 3))(x), c='blue', label="3° Polynomial Fit thru Max Distance Drones")
+
     plt.xlabel("Generations")
+    plt.ylabel("Target Score")
+    plt.title("Nonlinear Regression Fit of Target Scores\n"
+              "for Drones with Maximum Distance Fitness")
+    plt.legend()
     plt.show()
 
 
@@ -158,11 +181,13 @@ if __name__ == '__main__':
     # plotComparisons(lol.meanMutationTotals, lol.meanMutationDistance, lol.meanMutationTargets, lol.mutationLabels, "Mutation Rates")
     # plotComparisons(lol.changingMutationTotals, lol.changingMutationDistance, lol.changingMutationTargets, lol.mutationLabels, "Mutation Rates")
 
-    # plotComparisons(lol.meanPopTotals, lol.meanPopDistance, lol.meanPopTargets, lol.popSizeLabels, "Population Size")
+    plotComparisons(lol.meanPopTotals, lol.meanPopDistance, lol.meanPopTargets, lol.popSizeLabels, "Population Size")
     # plotComparisons(lol.changingPopTotals, lol.changingPopDistance, lol.changingPopTargets, lol.popSizeLabels, "Population Size")
 
-    plot3D(lol.thousandGens60)
-    # plot2D(lol.thousandGens60)
+    # plot3D(lol.thousandGens60)
+    # plot3D(lol.example3D2)
+
+    # plotTargetRegression(lol.example3D2)
 
     # plotDataBestPlane(ml.fixOverfitted_119)
 

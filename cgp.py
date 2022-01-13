@@ -77,6 +77,7 @@ class Individual:
         self.targetFitness = 0                  # Initialize targetFitness value of the genotype to 0
         self.levelsBack = self.numNodes         # Set levels back equivalent to the total number of nodes
         self.activeNodesDetermined = False      # Tells whether the active nodes have been found
+        self.activeNodes = 0                    # Number of nodes active for individual
         self.createNodes()                      # Call function to create all the nodes and link them
 
     def createNodes(self):
@@ -121,6 +122,7 @@ class Individual:
                     if node.inputIndices[i] >= 0:
                         # Set the node that provided the inputs to active
                         self.nodes[node.inputIndices[i]].active = True
+        self.activeNodes = activeNodes
 
     def eval(self, *args):
         """
@@ -292,3 +294,14 @@ def createPopulation(popSize):
     :return: List of Individual objects
     """
     return [Individual() for _ in range(popSize)]
+
+
+def calculateAvgActiveNodes(population):
+    """
+    Calculate the average number of active nodes
+    for a given population of individuals
+    :param population: list of Individual objects
+    :return: average number of active nodes
+    """
+    listActiveNodes = [individual.activeNodes for individual in population]
+    return np.mean(listActiveNodes)
